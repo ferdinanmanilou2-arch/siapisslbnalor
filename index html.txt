@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>SIAPIS SLBN ALOR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Link CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="header">
+        <h1>SIAPIS</h1>
+        <p>Sistem Informasi Administrasi & Profil Sekolah</p>
+        <p><strong>SLB Negeri Alor</strong></p>
+    </header>
+
+    <main class="container">
+        <div class="card">
+            <h2>Profil Sekolah</h2>
+            <p>Informasi umum tentang sekolah</p>
+        </div>
+
+        <div class="card">
+            <h2>Data Peserta Didik</h2>
+            <p>Data siswa dan kebutuhan khusus</p>
+        </div>
+
+        <div class="card">
+            <h2>Data Pendidik</h2>
+            <p>Guru dan tenaga kependidikan</p>
+        </div>
+
+        <div class="card">
+            <h2>Administrasi</h2>
+            <p>Dokumen dan laporan sekolah</p>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <a href="login.html" class="login-btn">Login Admin</a>
+        <p>© 2026 SIAPIS - SLBN Alor</p>
+    </footer>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>SIAPIS SLBN ALOR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Link CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="header">
+        <h1>SIAPIS</h1>
+        <p>Sistem Informasi Administrasi & Profil Sekolah</p>
+        <p><strong>SLB Negeri Alor</strong></p>
+    </header>
+
+    <main class="container">
+        <div class="card">
+            <h2>Profil Sekolah</h2>
+            <p>Informasi umum tentang sekolah</p>
+        </div>
+
+        <div class="card">
+            <h2>Data Peserta Didik</h2>
+            <p>Data siswa dan kebutuhan khusus</p>
+        </div>
+
+        <div class="card">
+            <h2>Data Pendidik</h2>
+            <p>Guru dan tenaga kependidikan</p>
+        </div>
+
+        <div class="card">
+            <h2>Administrasi</h2>
+            <p>Dokumen dan laporan sekolah</p>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <a href="login.html" class="login-btn">Login Admin</a>
+        <p>© 2026 SIAPIS - SLBN Alor</p>
+    </footer>
+
+</body>
+</html>
