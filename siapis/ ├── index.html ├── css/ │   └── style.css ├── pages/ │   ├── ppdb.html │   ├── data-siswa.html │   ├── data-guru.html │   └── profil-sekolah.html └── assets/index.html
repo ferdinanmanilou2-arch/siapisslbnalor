@@ -2,7 +2,39 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>SIAPIS SLBN ALOR</title>
+  <title>SIAPIS SLBN ALOR</title>/* BOTTOM NAVIGATION */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 0 10px;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -6px 18px rgba(0,0,0,0.08);
+  z-index: 999;
+}
+
+.nav-item {
+  text-decoration: none;
+  color: #6b7280;
+  font-size: 11px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nav-item i {
+  font-size: 22px;
+  margin-bottom: 2px;
+}
+
+.nav-item.active {
+  color: #6366f1;
+}
+
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Bootstrap -->
@@ -12,6 +44,24 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<nav class="bottom-nav">
+  <a href="index.html" class="nav-item active">
+    <i class="bi bi-grid-fill"></i>
+    <span>Dashboard</span>
+  </a>
+  <a href="pages/ppdb.html" class="nav-item">
+    <i class="bi bi-person-plus-fill"></i>
+    <span>PPDB</span>
+  </a>
+  <a href="pages/info.html" class="nav-item">
+    <i class="bi bi-info-circle-fill"></i>
+    <span>Info</span>
+  </a>
+  <a href="pages/admin.html" class="nav-item">
+    <i class="bi bi-person-lock"></i>
+    <span>Admin</span>
+  </a>
+</nav>
 
 <header class="app-header">
   <h1>SIAPIS</h1>
