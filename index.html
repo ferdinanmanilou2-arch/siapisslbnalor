@@ -1,9 +1,94 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <title>SIAPIS</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIAPIS SLBN ALOR</title>
+
+<style>
+body {
+  margin:0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg,#e3f0ff,#f6fbff);
+}
+
+header{
+  text-align:center;
+  padding:20px;
+  background:#0d6efd;
+  color:white;
+}
+
+.dashboard{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  gap:20px;
+  padding:20px;
+}
+
+.menu{
+  background:white;
+  border-radius:20px;
+  text-align:center;
+  padding:20px;
+  text-decoration:none;
+  color:black;
+  box-shadow:0 4px 10px rgba(0,0,0,0.1);
+  transition:0.2s;
+}
+
+.menu:hover{
+  transform:scale(1.05);
+}
+
+.icon{
+  font-size:35px;
+  margin-bottom:10px;
+}
+
+footer{
+  text-align:center;
+  padding:15px;
+  color:#666;
+}
+</style>
+
 </head>
+
 <body>
-  HALO SIAPIS
+
+<header>
+<h1>SIAPIS SLBN ALOR</h1>
+<p>Sistem Informasi Administrasi & Profil Sekolah</p>
+</header>
+
+<div class="dashboard">
+
+<a href="#" class="menu">
+<div class="icon">🏫</div>
+Dashboard
+</a>
+
+<a href="#" class="menu">
+<div class="icon">🧑‍🎓</div>
+PPDB
+</a>
+
+<a href="#" class="menu">
+<div class="icon">📢</div>
+Info Sekolah
+</a>
+
+<a href="#" class="menu">
+<div class="icon">⚙️</div>
+Admin
+</a>
+
+</div>
+
+<footer>
+© SIAPIS SLBN ALOR
+</footer>
+
 </body>
 </html>
