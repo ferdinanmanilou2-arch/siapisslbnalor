@@ -4,33 +4,33 @@
 <meta charset="UTF-8">
 <title>Dashboard SIAPIS</title>
 <style>
-body { margin:0; font-family:Arial,sans-serif; background:#F3F4F6; }
+body { margin:0; font-family:Arial,sans-serif; background:F3F4F6; }
 .container { display:flex; min-height:100vh; }
 
 /* Sidebar */
-.sidebar { width:260px; background:#1E3A8A; color:white; padding:20px; }
+.sidebar { width:260px; background:1E3A8A; color:white; padding:20px; }
 .sidebar h2 { text-align:center; margin-bottom:30px; }
 .sidebar a, .menu { display:block; padding:12px; margin-bottom:8px; color:white; text-decoration:none; border-radius:6px; cursor:pointer; }
-.sidebar a:hover, .menu:hover { background:#2563EB; }
+.sidebar a:hover, .menu:hover { background:2563EB; }
 .submenu { display:none; margin-left:15px; }
-.submenu a { background:#1E40AF; font-size:14px; }
+.submenu a { background:1E40AF; font-size:14px; }
 .submenu.show { display:block; }
-.logout { background:#DC2626; text-align:center; }
-.logout:hover { background:#B91C1C; }
+.logout { background:DC2626; text-align:center; }
+.logout:hover { background:B91C1C; }
 
 /* Main */
 .main { flex:1; padding:30px; overflow:auto; }
 .card { background:white; padding:20px; border-radius:10px; margin-top:20px; box-shadow:0 4px 8px rgba(0,0,0,0.1); }
 .card h3 { margin-top:0; }
 .btn { padding:6px 12px; margin:3px; border:none; border-radius:5px; cursor:pointer; }
-.btn-upload { background:#2563EB; color:white; }
-.btn-edit { background:#F59E0B; color:white; }
-.btn-delete { background:#DC2626; color:white; }
-.btn-export { background:#10B981; color:white; }
+.btn-upload { background:2563EB; color:white; }
+.btn-edit { background:F59E0B; color:white; }
+.btn-delete { background:DC2626; color:white; }
+.btn-export { background:10B981; color:white; }
 textarea { width:100%; }
 table { border-collapse: collapse; width:100%; }
-table, th, td { border:1px solid #ddd; padding:8px; text-align:left; }
-th { background:#2563EB; color:white; }
+table, th, td { border:1px solid ddd; padding:8px; text-align:left; }
+th { background:2563EB; color:white; }
 </style>
 </head>
 <body>
@@ -39,30 +39,30 @@ th { background:#2563EB; color:white; }
   <!-- Sidebar -->
   <aside class="sidebar">
     <h2>SIAPIS</h2>
-    <a href="#" onclick="showContent('dashboard')">🏠 Dashboard</a>
+    <a href="" onclick="showContent('dashboard')">🏠 Dashboard</a>
 
     <div class="menu" onclick="toggleSubmenu('dataMasterSub')">📊 Data Master ▼</div>
     <div class="submenu" id="dataMasterSub">
-      <a href="#" onclick="showContent('dataGuru')">👩‍🏫 Data Guru</a>
-      <a href="#" onclick="showContent('dataTendik')">🧑‍💼 Data Tendik</a>
-      <a href="#" onclick="showContent('dataSiswa')">👨‍🎓 Data Siswa</a>
+      <a href="" onclick="showContent('dataGuru')">👩‍🏫 Data Guru</a>
+      <a href="" onclick="showContent('dataTendik')">🧑‍💼 Data Tendik</a>
+      <a href="" onclick="showContent('dataSiswa')">👨‍🎓 Data Siswa</a>
     </div>
 
     <div class="menu" onclick="toggleSubmenu('sarprasSub')">🏫 Sarana & Prasarana ▼</div>
     <div class="submenu" id="sarprasSub">
-      <a href="#" onclick="showContent('barangBergerak')">📦 Barang Bergerak</a>
-      <a href="#" onclick="showContent('barangTidakBergerak')">🏢 Barang Tidak Bergerak</a>
+      <a href="" onclick="showContent('barangBergerak')">📦 Barang Bergerak</a>
+      <a href="" onclick="showContent('barangTidakBergerak')">🏢 Barang Tidak Bergerak</a>
     </div>
 
     <div class="menu" onclick="toggleSubmenu('ppdbSub')">📝 PPDB ▼</div>
     <div class="submenu" id="ppdbSub">
-      <a href="#" onclick="showContent('dataPeserta')">👶 Data Peserta Didik Terdaftar</a>
-      <a href="#" onclick="showContent('formulirPPDB')">📝 Formulir Pendaftaran</a>
-      <a href="#" onclick="showContent('alurPPDB')">➡️ Alur Pendaftaran</a>
+      <a href="" onclick="showContent('dataPeserta')">👶 Data Peserta Didik Terdaftar</a>
+      <a href="" onclick="showContent('formulirPPDB')">📝 Formulir Pendaftaran</a>
+      <a href="" onclick="showContent('alurPPDB')">➡️ Alur Pendaftaran</a>
     </div>
 
     <div class="menu" onclick="toggleSubmenu('adminSub')">⚙️ Admin ▼</div>
     <div class="submenu" id="adminSub">
-      <a href="#" onclick="showContent('suratMasuk')">📥 Surat Masuk</a>
-      <a href="#" onclick="showContent('suratKeluar')">📤 Surat Keluar</a>
-      <a href="#" onclick="sh
+      <a href="" onclick="showContent('suratMasuk')">📥 Surat Masuk</a>
+      <a href="" onclick="showContent('suratKeluar')">📤 Surat Keluar</a>
+      <a href="" onclick="sh
