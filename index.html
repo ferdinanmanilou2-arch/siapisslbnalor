@@ -57,25 +57,34 @@ margin-bottom:10px;
 
 <div class="container">
 
-<aside class="sidebar">
-<h2>SIAPIS</h2>
+<aside class="sidebar"><h2>SIAPIS</h2>
+
 <a onclick="showContent('dashboard')">🏠 Dashboard</a>
-<a onclick="showContent('latar')">📖 Latar Belakang</a>
-<a onclick="showContent('visi')">👁️ Visi</a>
+<a onclick="showContent('latar')">📘 Latar Belakang</a>
+<a onclick="showContent('visi')">🎯 Visi</a>
 <a onclick="showContent('misi')">🎯 Misi</a>
 <a onclick="showContent('tujuan')">🏁 Tujuan</a>
+
+<p class="menu-title">📊 Data Master</p>
+<a onclick="showContent('guru')">👩‍🏫 Data Guru</a>
+<a onclick="showContent('tendik')">🧑‍💼 Data Tendik</a>
+<a onclick="showContent('siswa')">👨‍🎓 Data Siswa</a>
+
+<p class="menu-title">🏫 Sarana Prasarana</p>
+<a onclick="showContent('bergerak')">📦 Barang Bergerak</a>
+<a onclick="showContent('tidakbergerak')">🏢 Barang Tidak Bergerak</a>
+
+<p class="menu-title">📝 PPDB</p>
+<a onclick="showContent('peserta')">👶 Data Peserta</a>
+<a onclick="showContent('formulir')">📄 Formulir</a>
+<a onclick="showContent('alur')">➡️ Alur PPDB</a>
+
+<p class="menu-title">⚙️ Admin</p>
+<a onclick="showContent('suratmasuk')">📥 Surat Masuk</a>
+<a onclick="showContent('suratkeluar')">📤 Surat Keluar</a>
+<a onclick="showContent('user')">👤 Manajemen User</a>
+
 <a class="logout">🚪 Logout</a>
-</aside>
-
-<div class="main">
-<h1>Dashboard SIAPIS</h1>
-
-<div class="dashboard">
-<div class="menu-card"><div class="icon">📘</div><p>Latar Belakang</p></div>
-<div class="menu-card"><div class="icon">🎯</div><p>Visi & Misi</p></div>
-<div class="menu-card"><div class="icon">📝</div><p>PPDB</p></div>
-<div class="menu-card"><div class="icon">⚙️</div><p>Admin</p></div>
-</div>
 
 <div class="card" id="contentArea">
 Silakan pilih menu di samping.
