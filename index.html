@@ -8,22 +8,16 @@
 <style>
 body{margin:0;font-family:Arial;background:#F3F4F6;}
 .container{display:flex;min-height:100vh;}
-
 .sidebar{width:260px;background:#1E3A8A;color:white;padding:20px;}
-.sidebar h2{text-align:center;margin-bottom:30px;}
+.sidebar h2{text-align:center;}
 .sidebar a{display:block;padding:12px;margin-bottom:8px;color:white;text-decoration:none;border-radius:6px;cursor:pointer;}
 .sidebar a:hover{background:#2563EB;}
-.menu-title{margin-top:15px;font-size:13px;opacity:0.7;}
-.logout{background:#DC2626;text-align:center;}
-.logout:hover{background:#B91C1C;}
-
 .main{flex:1;padding:30px;}
-.card{background:white;padding:20px;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.1);}
-
-.dashboard{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:20px;margin-top:20px;}
-.menu-card{background:white;border-radius:20px;text-align:center;padding:25px;box-shadow:0 4px 8px rgba(0,0,0,0.1);cursor:pointer;transition:0.3s;}
-.menu-card:hover{transform:translateY(-5px);}
+.card{background:white;padding:20px;border-radius:10px;margin-top:20px;box-shadow:0 4px 8px rgba(0,0,0,0.1);}
+.dashboard{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:20px;}
+.menu-card{background:white;border-radius:20px;text-align:center;padding:25px;box-shadow:0 4px 8px rgba(0,0,0,0.1);cursor:pointer;}
 .icon{font-size:40px;margin-bottom:10px;}
+button{padding:10px 15px;border:none;border-radius:6px;background:#1E3A8A;color:white;cursor:pointer;margin-top:10px;}
 </style>
 </head>
 
@@ -39,50 +33,31 @@ body{margin:0;font-family:Arial;background:#F3F4F6;}
 <a onclick="showContent('visi')">🎯 Visi</a>
 <a onclick="showContent('misi')">🎯 Misi</a>
 <a onclick="showContent('tujuan')">🏁 Tujuan</a>
-
-<p class="menu-title">📊 Data Master</p>
 <a onclick="showContent('guru')">👩‍🏫 Data Guru</a>
-<a onclick="showContent('tendik')">🧑‍💼 Data Tendik</a>
 <a onclick="showContent('siswa')">👨‍🎓 Data Siswa</a>
-
-<p class="menu-title">🏫 Sarana Prasarana</p>
-<a onclick="showContent('bergerak')">📦 Barang Bergerak</a>
-<a onclick="showContent('tidakbergerak')">🏢 Barang Tidak Bergerak</a>
-
-<p class="menu-title">📝 PPDB</p>
-<a onclick="showContent('peserta')">👶 Data Peserta</a>
-<a onclick="showContent('formulir')">📄 Formulir</a>
-<a onclick="showContent('alur')">➡️ Alur PPDB</a>
-
-<p class="menu-title">⚙️ Admin</p>
 <a onclick="showContent('suratmasuk')">📥 Surat Masuk</a>
-<a onclick="showContent('suratkeluar')">📤 Surat Keluar</a>
-<a onclick="showContent('user')">👤 Manajemen User</a>
 
-<a class="logout">🚪 Logout</a>
 </aside>
 
-<main class="main">
-<div class="card" id="contentArea"></div>
-</main>
+<div class="main">
+<div class="card" id="contentArea">
+Selamat datang SIAPIS SLBN ALOR
+</div>
+</div>
 
 </div>
 
 <script>
-function showContent(id){
 
+function showContent(id){
 let isi="";
 
-if(id==="dashboard"){if(id==="dashboard"){
+if(id==="dashboard"){
 isi=`
 <h2>🏠 Dashboard SIAPIS</h2>
 
-<button onclick="simpanGuru()">Tes Simpan Guru</button>
+<button onclick="simpanGuru()">Tes Simpan Guru ke Database</button>
 
-<div class="dashboard">
-
-isi=`
-<h2>🏠 Dashboard SIAPIS</h2>
 <div class="dashboard">
 
 <div class="menu-card" onclick="showContent('guru')">
@@ -93,72 +68,73 @@ isi=`
 <div class="icon">👨‍🎓</div>Data Siswa
 </div>
 
-<div class="menu-card" onclick="showContent('peserta')">
-<div class="icon">📝</div>PPDB
-</div>
-
-<div class="menu-card" onclick="showContent('bergerak')">
-<div class="icon">🏫</div>Sarana
-</div>
-
 <div class="menu-card" onclick="showContent('suratmasuk')">
 <div class="icon">📥</div>Surat Masuk
-</div>
-
-<div class="menu-card" onclick="showContent('user')">
-<div class="icon">⚙️</div>Admin
 </div>
 
 </div>`;
 }
 
-else if(id==="guru"){ isi="<h2>👩‍🏫 Data Guru</h2>"; }
-else if(id==="tendik"){ isi="<h2>🧑‍💼 Data Tendik</h2>"; }
-else if(id==="siswa"){ isi="<h2>👨‍🎓 Data Siswa</h2>"; }
-else if(id==="bergerak"){ isi="<h2>📦 Barang Bergerak</h2>"; }
-else if(id==="tidakbergerak"){ isi="<h2>🏢 Barang Tidak Bergerak</h2>"; }
-else if(id==="peserta"){ isi="<h2>👶 Data Peserta PPDB</h2>"; }
-else if(id==="formulir"){ isi="<h2>📄 Formulir PPDB</h2>"; }
-else if(id==="alur"){ isi="<h2>➡️ Alur PPDB</h2>"; }
-else if(id==="suratmasuk"){ isi="<h2>📥 Surat Masuk</h2>"; }
-else if(id==="suratkeluar"){ isi="<h2>📤 Surat Keluar</h2>"; }
-else if(id==="user"){ isi="<h2>👤 Manajemen User</h2>"; }
-else if(id==="latar"){ isi="<h2>📘 Latar Belakang</h2>"; }
-else if(id==="visi"){ isi="<h2>🎯 Visi Sekolah</h2>"; }
-else if(id==="misi"){ isi="<h2>🎯 Misi Sekolah</h2>"; }
-else if(id==="tujuan"){ isi="<h2>🏁 Tujuan Sekolah</h2>"; }
+else if(id==="guru"){
+isi="<h2>Data Guru</h2><p>Halaman input data guru sekolah.</p>";
+}
+
+else if(id==="siswa"){
+isi="<h2>Data Siswa</h2><p>Halaman input data siswa.</p>";
+}
+
+else if(id==="latar"){
+isi="<h2>Latar Belakang</h2>";
+}
+
+else if(id==="visi"){
+isi="<h2>Visi Sekolah</h2>";
+}
+
+else if(id==="misi"){
+isi="<h2>Misi Sekolah</h2>";
+}
+
+else if(id==="tujuan"){
+isi="<h2>Tujuan Sekolah</h2>";
+}
+
+else if(id==="suratmasuk"){
+isi="<h2>Surat Masuk</h2>";
+}
 
 document.getElementById("contentArea").innerHTML=isi;
 }
 
-showContent("dashboard");
-</script><script type="module">
+</script>
+
+<!-- FIREBASE -->
+<script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore,collection,addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "APIKEY_KAMU",
-  authDomain: "siapis-a83c4.firebaseapp.com",
-  projectId: "siapis-a83c4",
-  storageBucket: "siapis-a83c4.appspot.com",
-  messagingSenderId: "938464817112",
-  appId: "APPID_KAMU"
+apiKey:"APIKEY_KAMU",
+authDomain:"PROJECTID_KAMU.firebaseapp.com",
+projectId:"PROJECTID_KAMU",
+storageBucket:"PROJECTID_KAMU.appspot.com",
+messagingSenderId:"XXXX",
+appId:"APPID_KAMU"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
 
-window.simpanGuru = async function(){
+window.simpanGuru=async function(){
 await addDoc(collection(db,"guru"),{
-nama:"Tes Guru SLBN Alor",
+nama:"Guru SLBN ALOR",
 jabatan:"Operator"
 });
-alert("Data guru berhasil masuk database sekolah 👍");
+alert("Data berhasil masuk database 👍");
 }
 
 </script>
-
 
 </body>
 </html>
