@@ -1,1 +1,147 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SIAPIS SLBN ALOR</title>
+
+<style>
+body{margin:0;font-family:Arial;background:#F3F4F6;}
+.container{display:flex;min-height:100vh;}
+.sidebar{width:260px;background:#1E3A8A;color:white;padding:20px;}
+.sidebar h2{text-align:center;}
+.sidebar a{display:block;padding:10px;margin:5px 0;cursor:pointer;border-radius:6px;}
+.sidebar a:hover{background:#2563EB;}
+.main{flex:1;padding:20px;}
+.card{background:white;padding:20px;border-radius:10px;}
+button{padding:10px;margin:5px;border:none;background:#2563EB;color:white;border-radius:6px;cursor:pointer;}
+.center{text-align:center;}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="sidebar">
+<h2>SIAPIS</h2>
+<a onclick="showContent('dashboard')">🏠 Dashboard</a>
+<a onclick="showContent('guru')">👩‍🏫 Data Guru</a>
+<a onclick="showContent('siswa')">👨‍🎓 Data Siswa</a>
+<a onclick="showContent('tendik')">🧑‍💼 Tendik</a>
+<a onclick="showContent('sarpras')">🏗️ Sarpras</a>
+<a onclick="showContent('masuk')">📥 Surat Masuk</a>
+<a onclick="showContent('keluar')">📤 Surat Keluar</a>
+<a onclick="showContent('ppdb')">📝 PPDB</a>
+</div>
+
+<div class="main">
+<div id="content" class="card center">
+<h2>👋 Selamat Datang di SIAPIS</h2>
+<p>Sistem Informasi Aplikasi & Profil Sekolah</p>
+</div>
+</div>
+
+</div>
+
+<script>
+
+function showContent(id){
+
+let isi="";
+
+if(id==="dashboard"){
+isi="<h2>📊 Dashboard SIAPIS Integrasi Google Nasional</h2>";
+}
+
+if(id==="guru"){
+isi=`
+<h2>👩‍🏫 Data Guru</h2>
+
+<a href="LINK_SHEET_GURU" target="_blank"><button>✏️ Edit Data Guru</button></a>
+
+<a href="LINK_FORM_GURU" target="_blank"><button>📝 Input Guru</button></a>
+
+<a href="LINK_DRIVE_GURU" target="_blank"><button>📁 Upload Berkas</button></a>
+
+<a href="LINK_EXCEL_GURU"><button>⬇️ Download Excel</button></a>
+`;
+}
+
+if(id==="siswa"){
+isi=`
+<h2>👨‍🎓 Data Siswa</h2>
+
+<a href="LINK_SHEET_SISWA" target="_blank"><button>✏️ Edit Data</button></a>
+
+<a href="LINK_FORM_PPDB" target="_blank"><button>📝 Input Siswa</button></a>
+
+<a href="LINK_DRIVE_SISWA" target="_blank"><button>📁 Upload Dokumen</button></a>
+
+<a href="LINK_EXCEL_SISWA"><button>⬇️ Download Excel</button></a>
+`;
+}
+
+if(id==="tendik"){
+isi=`
+<h2>🧑‍💼 Data Tendik</h2>
+
+<a href="LINK_SHEET_TENDIK" target="_blank"><button>✏️ Edit Data</button></a>
+
+<a href="LINK_FORM_TENDIK" target="_blank"><button>📝 Input Data</button></a>
+
+<a href="LINK_DRIVE_TENDIK" target="_blank"><button>📁 Upload Berkas</button></a>
+`;
+}
+
+if(id==="sarpras"){
+isi=`
+<h2>🏗️ Sarana & Prasarana</h2>
+
+<a href="LINK_SHEET_SARPRAS" target="_blank"><button>✏️ Edit Inventaris</button></a>
+
+<a href="LINK_DRIVE_SARPRAS" target="_blank"><button>📁 Upload Foto Barang</button></a>
+
+<a href="LINK_EXCEL_SARPRAS"><button>⬇️ Download Laporan</button></a>
+`;
+}
+
+if(id==="masuk"){
+isi=`
+<h2>📥 Surat Masuk</h2>
+
+<a href="LINK_DRIVE_SURATMASUK" target="_blank"><button>📁 Upload Surat</button></a>
+
+<a href="LINK_SHEET_SURATMASUK" target="_blank"><button>📊 Buku Agenda</button></a>
+`;
+}
+
+if(id==="keluar"){
+isi=`
+<h2>📤 Surat Keluar</h2>
+
+<a href="LINK_DRIVE_SURATKELUAR" target="_blank"><button>📁 Upload Surat</button></a>
+
+<a href="LINK_SHEET_SURATKELUAR" target="_blank"><button>📊 Buku Agenda</button></a>
+`;
+}
+
+if(id==="ppdb"){
+isi=`
+<h2>📝 PPDB Online</h2>
+
+<a href="LINK_FORM_PPDB" target="_blank"><button>📥 Form Pendaftaran</button></a>
+
+<a href="LINK_SHEET_PPDB" target="_blank"><button>📊 Data Pendaftar</button></a>
+`;
+}
+
+document.getElementById("content").innerHTML="<div class='card'>"+isi+"</div>";
+
+}
+
+</script>
+
+</body>
+</html>
 
