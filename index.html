@@ -90,51 +90,6 @@ document.getElementById("contentArea").innerHTML=isi;
 
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore,collection,addDoc }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-import { getAuth,signInWithEmailAndPassword }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-import { getStorage,ref,uploadBytes }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-
-const firebaseConfig={
-apiKey:"APIKEY_KAMU",
-authDomain:"PROJECTID_KAMU.firebaseapp.com",
-projectId:"PROJECTID_KAMU",
-storageBucket:"PROJECTID_KAMU.appspot.com",
-messagingSenderId:"MESSAGINGSENDERID_KAMU",
-appId:"APPID_KAMU"
-};
-
-const app=initializeApp(firebaseConfig);
-const db=getFirestore(app);
-const auth=getAuth(app);
-const storage=getStorage(app);
-
-window.loginAdmin=async function(){
-const email=document.getElementById("email").value;
-const password=document.getElementById("password").value;
-await signInWithEmailAndPassword(auth,email,password);
-alert("Login berhasil 👍");
-showContent("dashboard");
-}
-
-window.tambahGuru=async function(){
-const nama=document.getElementById("namaGuru").value;
-const jabatan=document.getElementById("jabatanGuru").value;
-await addDoc(collection(db,"guru"),{nama,jabatan});
-alert("Guru tersimpan 👍");
-}
-
-window.uploadFile=async function(){
-const file=document.getElementById("fileUpload").files[0];
-const storageRef=ref(storage,"dokumen/"+file.name);
-await uploadBytes(storageRef,file);
-alert("Upload berhasil 👍");
-}showContent("dashboard");
 </script>
 
 </body>
