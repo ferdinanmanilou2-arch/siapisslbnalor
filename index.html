@@ -32,11 +32,11 @@ button{padding:10px 15px;border:none;border-radius:6px;background:#1E3A8A;color:
 <a onclick="showContent('dashboard')">🏠 Dashboard</a>
 <a onclick="showContent('guru')">👩‍🏫 Data Guru</a>
 <a onclick="showContent('siswa')">👨‍🎓 Data Siswa</a>
-<a onclick="showContent('surat')">📁 Upload Dokumen</a>
+<a onclick="showContent('dokumen')">📁 Upload Dokumen</a>
 </aside>
 
 <div class="main">
-<div id="contentArea" class="card">Selamat datang SIAPIS SLBN ALOR</div>
+<div id="contentArea" class="card">Selamat datang di SIAPIS SLBN ALOR 👍</div>
 </div>
 
 </div>
@@ -44,49 +44,59 @@ button{padding:10px 15px;border:none;border-radius:6px;background:#1E3A8A;color:
 <script>
 
 function showContent(id){
+
 let isi="";
 
 if(id==="login"){
 isi=`
 <h2>Login Admin</h2>
-<input id="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password">
-<button onclick="loginAdmin()">Login</button>`;
+<input placeholder="Email">
+<input type="password" placeholder="Password">
+<button>Login</button>`;
 }
 
 else if(id==="dashboard"){
 isi=`
 <h2>Dashboard SIAPIS</h2>
 <div class="dashboard">
-<div class="menu-card" onclick="showContent('guru')"><div class="icon">👩‍🏫</div>Data Guru</div>
-<div class="menu-card" onclick="showContent('siswa')"><div class="icon">👨‍🎓</div>Data Siswa</div>
-<div class="menu-card" onclick="showContent('surat')"><div class="icon">📁</div>Upload</div>
+<div class="menu-card" onclick="showContent('guru')">
+<div class="icon">👩‍🏫</div>Data Guru
+</div>
+
+<div class="menu-card" onclick="showContent('siswa')">
+<div class="icon">👨‍🎓</div>Data Siswa
+</div>
+
+<div class="menu-card" onclick="showContent('dokumen')">
+<div class="icon">📁</div>Upload Dokumen
+</div>
+
 </div>`;
 }
 
 else if(id==="guru"){
 isi=`
 <h2>Input Data Guru</h2>
-<input id="namaGuru" placeholder="Nama Guru">
-<input id="jabatanGuru" placeholder="Jabatan">
-<button onclick="tambahGuru()">Simpan Guru</button>`;
+<input placeholder="Nama Guru">
+<input placeholder="Jabatan">
+<button>Simpan</button>`;
 }
 
 else if(id==="siswa"){
-isi="<h2>Data Siswa</h2>";
+isi=`<h2>Halaman Data Siswa</h2>`;
 }
 
-else if(id==="surat"){
+else if(id==="dokumen"){
 isi=`
 <h2>Upload Dokumen Sekolah</h2>
-<input type="file" id="fileUpload">
-<button onclick="uploadFile()">Upload File</button>`;
+<input type="file">
+<button>Upload</button>`;
 }
 
 document.getElementById("contentArea").innerHTML=isi;
 }
 
-<script type="module">
+showContent("dashboard");
 
 </script>
 
