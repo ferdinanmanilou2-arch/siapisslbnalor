@@ -202,6 +202,28 @@ if(role!=="Admin"){document.getElementById("menuAdmin").style.display="none";}
 </div>
 </div>
 
-</body>
+</body><script>
+const API_SIAPIS = "https://script.google.com/macros/s/AKfycbyQatfnSlJNY5w1SZhWpgYvwHGbr5sbsCtRv6XiLcSeRSLtNu1JtHqhK2lWfUiHCRc/exec";
+
+// cek koneksi database
+fetch(API_SIAPIS)
+.then(res => res.json())
+.then(data => {
+   console.log("DATABASE SIAPIS AKTIF:", data);
+})
+.catch(err => {
+   console.log("DATABASE ERROR:", err);
+});
+
+// contoh load data siswa
+function loadDataSiswa(){
+ fetch(API_SIAPIS + "?sheet=DATA_SISWA")
+ .then(res => res.json())
+ .then(data => {
+    console.log("DATA SISWA:", data);
+ });
+}
+</script>
+
 </html>
 
