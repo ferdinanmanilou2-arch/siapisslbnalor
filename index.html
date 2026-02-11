@@ -1,1 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>SIAPIS SLBN ALOR</title>
+
+<style>
+body{margin:0;font-family:Arial;background:#f3f4f6;}
+.header{background:#3b82f6;color:white;padding:15px;text-align:center;font-size:22px;}
+.container{display:flex;height:100vh;}
+.sidebar{width:260px;background:#1e3a8a;color:white;padding:15px;overflow:auto;}
+.sidebar a{display:block;color:white;padding:10px;text-decoration:none;border-radius:6px;margin-bottom:5px;cursor:pointer;}
+.sidebar a:hover{background:#2563eb;}
+.content{flex:1;padding:20px;background:white;overflow:auto;}
+.submenu{display:none;padding-left:15px;}
+.card{background:#f1f5f9;padding:15px;border-radius:8px;margin-bottom:10px;}
+</style>
+</head>
+
+<body>
+
+<div class="header">SIAPIS SLBN ALOR</div>
+
+<div class="container">
+
+<div class="sidebar">
+
+<a onclick="toggleMenu('dashboard')">🏠 Dasbor</a>
+<div id="dashboard" class="submenu">
+<a onclick="showContent('profil')">Profil Sekolah</a>
+<a onclick="showContent('dokumentasi')">Dokumentasi</a>
+<a onclick="showContent('info')">Informasi</a>
+</div>
+
+<a onclick="toggleMenu('induk')">🏫 Data Induk Sekolah</a>
+<div id="induk" class="submenu">
+<a onclick="showContent('guru')">Guru & Tendik</a>
+<a onclick="showContent('struktur')">Struktur</a>
+</div>
+
+<a onclick="toggleMenu('siswa')">👨‍🎓 Data Siswa</a>
+<div id="siswa" class="submenu">
+<a onclick="showContent('sd')">Jenjang SD</a>
+<a onclick="showContent('smp')">Jenjang SMP</a>
+<a onclick="showContent('sma')">Jenjang SMA</a>
+</div>
+
+<a onclick="toggleMenu('ppdb')">📝 PPDB</a>
+<div id="ppdb" class="submenu">
+<a onclick="showContent('form')">Formulir</a>
+<a onclick="showContent('calon')">Data Calon</a>
+</div>
+
+<a onclick="toggleMenu('sarpras')">🪑 Sarpras</a>
+<div id="sarpras" class="submenu">
+<a onclick="showContent('barang')">Inventaris</a>
+</div>
+
+<a onclick="showContent('admin')">⚙️ Admin</a>
+
+</div>
+
+<div class="content" id="content">
+<h2>Selamat Datang di SIAPIS</h2>
+<div class="card">Sistem Informasi Administrasi & Profil Sekolah</div>
+</div>
+
+</div>
+
+<script>
+const API_SIAPIS="https://script.google.com/macros/s/AKfycbyQatfnSlJNY5w1SZhWpgYvwHGbr5sbsCtRv6XiLcSeRSLtNu1JtHqhK2lWfUiHCRc/exec";
+
+fetch(API_SIAPIS)
+.then(res=>res.json())
+.then(data=>console.log("DATABASE SIAPIS AKTIF:",data));
+
+function toggleMenu(id){
+let el=document.getElementById(id);
+el.style.display=el.style.display==="block"?"none":"block";
+}
+
+function showContent(menu){
+document.getElementById("content").innerHTML="<h2>"+menu+"</h2><div class='card'>Halaman "+menu+"</div>";
+}
+
+function loadDataSiswa(){
+fetch(API_SIAPIS+"?sheet=DATA_SISWA")
+.then(res=>res.json())
+.then(data=>console.log("DATA SISWA:",data));
+}
+</script>
+
+</body>
+</html>
 
