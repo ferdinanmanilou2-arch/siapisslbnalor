@@ -1,1 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SIAPIS - Sistem Informasi Sekolah</title>
+
+<style>
+body{margin:0;font-family:Arial;background:#eef2ff}
+.app{display:flex;height:100vh}
+.sidebar{width:270px;background:#1e3a8a;color:white;overflow:auto;padding:15px}
+.sidebar h2{margin-top:0}
+.menu{cursor:pointer;padding:10px;border-radius:8px;margin-top:4px}
+.menu:hover{background:#2563eb}
+.submenu{display:none;padding-left:15px}
+.submenu a{display:block;padding:8px;color:white;text-decoration:none;border-radius:6px}
+.submenu a:hover{background:#3b82f6}
+.content{flex:1;padding:20px;overflow:auto}
+.page{display:none;background:white;padding:20px;border-radius:15px}
+.active{display:block}
+.login{position:fixed;top:0;left:0;width:100%;height:100%;background:#1e3a8a;color:white;display:flex;align-items:center;justify-content:center;flex-direction:column}
+table{width:100%;border-collapse:collapse}
+th,td{border:1px solid #ddd;padding:8px}
+th{background:#1e3a8a;color:white}
+button{padding:8px;border:none;border-radius:6px;background:#2563eb;color:white;cursor:pointer}
+</style>
+</head>
+
+<body>
+
+<div id="login" class="login">
+<h2>LOGIN SIAPIS</h2>
+<select id="role">
+<option>Admin</option>
+<option>Guru</option>
+<option>Operator</option>
+</select>
+<button onclick="login()">Masuk</button>
+</div>
+
+<div id="app" class="app" style="display:none">
+
+<div class="sidebar">
+<h2>SIAPIS</h2>
+<div class="menu" onclick="showPage('dashboard')">🏠 Dasbor</div>
+<div class="menu" onclick="toggleMenu('profil')">📚 Profil Sekolah</div>
+<div id="profil" class="submenu">
+<a onclick="showPage('latar')">Latar Belakang</a>
+<a onclick="showPage('visi')">Visi</a>
+<a onclick="showPage('misi')">Misi</a>
+<a onclick="showPage('tujuan')">Tujuan Sekolah</a>
+</div>
+<div class="menu" onclick="toggleMenu('siswa')">👨‍🎓 Data Siswa</div>
+<div id="siswa" class="submenu">
+<a onclick="showPage('sd1')">SD Kelas 1</a>
+<a onclick="showPage('smp7')">SMP VII</a>
+<a onclick="showPage('sma10')">SMA X</a>
+</div>
+<div id="menuAdmin" class="menu" onclick="showPage('admin')">⚙️ Admin</div>
+</div>
+
+<div class="content">
+<div id="dashboard" class="page active"><h2>Dashboard Sekolah</h2></div>
+<div id="latar" class="page"><h2>Latar Belakang</h2></div>
+<div id="visi" class="page"><h2>Visi</h2></div>
+<div id="misi" class="page"><h2>Misi</h2></div>
+<div id="tujuan" class="page"><h2>Tujuan Sekolah</h2></div>
+<div id="sd1" class="page"><h2>Data Siswa SD 1</h2></div>
+<div id="smp7" class="page"><h2>Data Siswa SMP VII</h2></div>
+<div id="sma10" class="page"><h2>Data Siswa SMA X</h2></div>
+<div id="admin" class="page"><h2>Panel Admin</h2></div>
+</div>
+
+</div>
+
+<!-- SCRIPT APLIKASI -->
+<script>
+const API_SIAPIS="https://script.google.com/macros/s/AKfycbzyg9I3oauVfiXtSzr7iRym1VTAZ6jny7FFfWYpM-4XHkCMWNqUGtn6RWuBi38VWmE7/exec";
+
+fetch(API_SIAPIS)
+.then(res=>res.json())
+.then(data=>console.log("DATABASE SIAPIS AKTIF:",data))
+.catch(err=>console.log("DATABASE ERROR:",err));
+
+let role="";
+function toggleMenu(id){
+let el=document.getElementById(id);
+el.style.display=el.style.display==="block"?"none":"block";
+}
+function showPage(id){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+}
+function login(){
+role=document.getElementById("role").value;
+document.getElementById("login").style.display="none";
+document.getElementById("app").style.display="flex";
+if(role!=="Admin"){document.getElementById("menuAdmin").style.display="none";}
+}
+</script>
+
+</body>
+</html>
 
