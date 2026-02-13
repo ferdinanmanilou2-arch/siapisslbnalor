@@ -19,9 +19,6 @@ body{margin:0;font-family:Arial;background:#eef2ff}
 .page{display:none;background:white;padding:20px;border-radius:15px}
 .active{display:block}
 .login{position:fixed;top:0;left:0;width:100%;height:100%;background:#1e3a8a;color:white;display:flex;align-items:center;justify-content:center;flex-direction:column}
-table{width:100%;border-collapse:collapse}
-th,td{border:1px solid #ddd;padding:8px}
-th{background:#1e3a8a;color:white}
 button{padding:8px;border:none;border-radius:6px;background:#2563eb;color:white;cursor:pointer}
 </style>
 </head>
@@ -42,38 +39,115 @@ button{padding:8px;border:none;border-radius:6px;background:#2563eb;color:white;
 
 <div class="sidebar">
 <h2>SIAPIS</h2>
+
 <div class="menu" onclick="showPage('dashboard')">🏠 Dasbor</div>
+
 <div class="menu" onclick="toggleMenu('profil')">📚 Profil Sekolah</div>
 <div id="profil" class="submenu">
 <a onclick="showPage('latar')">Latar Belakang</a>
 <a onclick="showPage('visi')">Visi</a>
 <a onclick="showPage('misi')">Misi</a>
-<a onclick="showPage('tujuan')">Tujuan Sekolah</a>
+<a onclick="showPage('tujuan')">Tujuan</a>
 </div>
+
 <div class="menu" onclick="toggleMenu('siswa')">👨‍🎓 Data Siswa</div>
 <div id="siswa" class="submenu">
 <a onclick="showPage('sd1')">SD Kelas 1</a>
 <a onclick="showPage('smp7')">SMP VII</a>
 <a onclick="showPage('sma10')">SMA X</a>
 </div>
+
+<div class="menu" onclick="toggleMenu('arsip')">📁 Arsip Dokumen</div>
+<div id="arsip" class="submenu">
+<a onclick="showPage('suratmasuk')">Surat Masuk</a>
+<a onclick="showPage('suratkeluar')">Surat Keluar</a>
+<a onclick="showPage('suratberharga')">Surat Berharga</a>
+</div>
+
+<div class="menu" onclick="toggleMenu('sarpras')">🏫 Sarana & Prasarana</div>
+<div id="sarpras" class="submenu">
+<a onclick="showPage('bergerak')">Barang Bergerak</a>
+<a onclick="showPage('tidakbergerak')">Barang Tidak Bergerak</a>
+</div>
+
+<div class="menu" onclick="toggleMenu('dataadmin')">👨‍💼 Data Admin</div>
+<div id="dataadmin" class="submenu">
+<a onclick="showPage('struktur')">Struktur Organisasi</a>
+<a onclick="showPage('updateadmin')">Perbaharui Data</a>
+</div>
+
+<div class="menu" onclick="toggleMenu('ppdb')">📝 PPDB</div>
+<div id="ppdb" class="submenu">
+<a onclick="showPage('ppdbdaftar')">Pendaftaran</a>
+<a onclick="showPage('ppdbseleksi')">Seleksi</a>
+<a onclick="showPage('ppdbhasil')">Hasil</a>
+<a onclick="showPage('ppdbloket')">Laporan</a>
+</div>
+
 <div id="menuAdmin" class="menu" onclick="showPage('admin')">⚙️ Admin</div>
+
 </div>
 
 <div class="content">
+
 <div id="dashboard" class="page active"><h2>Dashboard Sekolah</h2></div>
 <div id="latar" class="page"><h2>Latar Belakang</h2></div>
 <div id="visi" class="page"><h2>Visi</h2></div>
 <div id="misi" class="page"><h2>Misi</h2></div>
 <div id="tujuan" class="page"><h2>Tujuan Sekolah</h2></div>
+
 <div id="sd1" class="page"><h2>Data Siswa SD 1</h2></div>
 <div id="smp7" class="page"><h2>Data Siswa SMP VII</h2></div>
 <div id="sma10" class="page"><h2>Data Siswa SMA X</h2></div>
+
+<div id="suratmasuk" class="page">
+<h2>Surat Masuk</h2>
+<input type="file" onchange="uploadFile(this)">
+<button onclick="downloadFile()">Download</button>
+</div>
+
+<div id="suratkeluar" class="page">
+<h2>Surat Keluar</h2>
+<input type="file" onchange="uploadFile(this)">
+</div>
+
+<div id="suratberharga" class="page">
+<h2>Surat Berharga</h2>
+<input type="file" onchange="uploadFile(this)">
+</div>
+
+<div id="bergerak" class="page">
+<h2>Barang Bergerak</h2>
+<input type="file" onchange="uploadFile(this)">
+</div>
+
+<div id="tidakbergerak" class="page">
+<h2>Barang Tidak Bergerak</h2>
+<input type="file" onchange="uploadFile(this)">
+</div>
+
+<div id="struktur" class="page">
+<h2>Struktur Organisasi</h2>
+<textarea style="width:100%;height:100px"></textarea>
+<button>Simpan</button>
+</div>
+
+<div id="updateadmin" class="page">
+<h2>Perbaharui Data Admin</h2>
+<input type="text" placeholder="Nama Admin">
+<button>Simpan</button>
+</div>
+
+<div id="ppdbdaftar" class="page"><h2>Pendaftaran PPDB</h2><input type="file" onchange="uploadFile(this)"></div>
+<div id="ppdbseleksi" class="page"><h2>Seleksi PPDB</h2></div>
+<div id="ppdbhasil" class="page"><h2>Hasil PPDB</h2></div>
+<div id="ppdbloket" class="page"><h2>Laporan PPDB</h2></div>
+
 <div id="admin" class="page"><h2>Panel Admin</h2></div>
-</div>
 
 </div>
+</div>
 
-<!-- SCRIPT APLIKASI -->
 <script>
 const API_SIAPIS="https://script.google.com/macros/s/AKfycbzyg9I3oauVfiXtSzr7iRym1VTAZ6jny7FFfWYpM-4XHkCMWNqUGtn6RWuBi38VWmE7/exec";
 
@@ -97,8 +171,15 @@ document.getElementById("login").style.display="none";
 document.getElementById("app").style.display="flex";
 if(role!=="Admin"){document.getElementById("menuAdmin").style.display="none";}
 }
+function uploadFile(input){
+const file=input.files[0];
+if(!file)return alert("Pilih file dulu");
+alert("File siap upload: "+file.name);
+}
+function downloadFile(){
+window.open("LINK_GOOGLE_DRIVE_FILE_KAMU");
+}
 </script>
 
 </body>
 </html>
-
