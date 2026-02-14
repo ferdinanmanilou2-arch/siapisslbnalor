@@ -76,7 +76,7 @@ document.getElementById("app").style.display="flex";
 function uploadFile(input){
 
 const file=input.files[0];
-if(!file)return alert("Pilih file dulu");
+if(!file) return alert("Pilih file dulu");
 
 lastFile=file;
 
@@ -84,17 +84,31 @@ if(file.name.endsWith(".xlsx")||file.name.endsWith(".xls")){
 readExcel(file);
 }
 
+const reader=new FileReader();
+
+reader.onload=function(e){
+
+const base64=e.target.result.split(",")[1];
+
 fetch(API_SIAPIS,{
 method:"POST",
 headers:{ "Content-Type":"application/json" },
 body:JSON.stringify({
-nama:file.name,
-kelas:"UPLOAD_SIAPIS"
+name:file.name,
+type:file.type,
+file:base64,
+menu:"SIAPIS"
 })
 })
 .then(res=>res.text())
-.then(()=>alert("✅ Upload data berhasil ke Spreadsheet"))
+.then(()=>alert("✅ Upload berhasil ke Google Drive"))
 .catch(()=>alert("❌ Upload gagal"));
+
+};
+
+reader.readAsDataURL(file);
+
+}
 
 }
 
