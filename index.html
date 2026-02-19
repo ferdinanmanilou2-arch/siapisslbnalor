@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SIAPIS - Sistem Informasi Sekolah</title>
+<title>SIAPIS - Sistem Informasi Administrasi Sekolah</title>
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
 <style>
 body{margin:0;font-family:Arial;background:#eef2ff}
 .app{display:flex;height:100vh}
-.sidebar{width:260px;background:#1e3a8a;color:white;padding:15px;overflow:auto}
+.sidebar{width:270px;background:#1e3a8a;color:white;padding:15px;overflow:auto}
 .sidebar h2{margin-top:0}
 .menu{cursor:pointer;padding:10px;border-radius:8px;margin-top:5px}
 .menu:hover{background:#2563eb}
@@ -23,6 +23,10 @@ body{margin:0;font-family:Arial;background:#eef2ff}
 .login{position:fixed;top:0;left:0;width:100%;height:100%;background:#1e3a8a;color:white;display:flex;align-items:center;justify-content:center;flex-direction:column}
 button{padding:8px;border:none;border-radius:6px;background:#2563eb;color:white;cursor:pointer;margin-top:5px}
 input,select{padding:6px;border-radius:6px;border:1px solid #ccc;margin-top:5px}
+.card{background:#f9fafb;padding:15px;border-radius:10px;margin-top:10px}
+table{border-collapse:collapse;width:100%;margin-top:10px}
+table,th,td{border:1px solid #ccc}
+th,td{padding:8px;text-align:left}
 </style>
 </head>
 
@@ -30,7 +34,7 @@ input,select{padding:6px;border-radius:6px;border:1px solid #ccc;margin-top:5px}
 
 <!-- LOGIN -->
 <div id="login" class="login">
-<h2>LOGIN SIAPIS</h2>
+<h2>LOGIN SIAPIS RESMI</h2>
 <select id="role">
 <option>Admin</option>
 <option>Guru</option>
@@ -47,11 +51,31 @@ input,select{padding:6px;border-radius:6px;border:1px solid #ccc;margin-top:5px}
 
 <div class="menu" onclick="showPage('dashboard')">🏠 Dashboard</div>
 
+<div class="menu" onclick="toggleMenu('sekolahMenu')">🏫 Data Sekolah ▼</div>
+<div id="sekolahMenu" class="submenu">
+<div onclick="showPage('profilSekolah')">Profil Sekolah</div>
+<div onclick="showPage('visiMisi')">Visi & Misi</div>
+</div>
+
+<div class="menu" onclick="toggleMenu('siswaMenu')">👨‍🎓 Data Siswa ▼</div>
+<div id="siswaMenu" class="submenu">
+<div onclick="showPage('inputSiswa')">Input Siswa</div>
+<div onclick="showPage('listSiswa')">Daftar Siswa</div>
+</div>
+
+<div class="menu" onclick="toggleMenu('guruMenu')">👩‍🏫 Data Guru ▼</div>
+<div id="guruMenu" class="submenu">
+<div onclick="showPage('inputGuru')">Input Guru</div>
+<div onclick="showPage('listGuru')">Daftar Guru</div>
+</div>
+
 <div class="menu" onclick="toggleMenu('dokumenMenu')">📁 Dokumen ▼</div>
 <div id="dokumenMenu" class="submenu">
-<div onclick="showPage('uploadPage')">⬆ Upload Berkas</div>
-<div onclick="showPage('dataPage')">📄 Data Berkas</div>
+<div onclick="showPage('uploadPage')">Upload Berkas</div>
+<div onclick="showPage('dataPage')">Data Berkas</div>
 </div>
+
+<div class="menu" onclick="logout()">🚪 Logout</div>
 
 </div>
 
@@ -59,23 +83,69 @@ input,select{padding:6px;border-radius:6px;border:1px solid #ccc;margin-top:5px}
 
 <!-- DASHBOARD -->
 <div id="dashboard" class="page active">
-<h2>Selamat Datang di SIAPIS</h2>
-<p>Sistem Informasi Administrasi Sekolah</p>
+<h2>Dashboard SIAPIS</h2>
+<div class="card">Jumlah Siswa: <span id="totalSiswa">0</span></div>
+<div class="card">Jumlah Guru: <span id="totalGuru">0</span></div>
+</div>
+
+<!-- PROFIL SEKOLAH -->
+<div id="profilSekolah" class="page">
+<h2>Profil Sekolah</h2>
+<textarea style="width:100%;height:100px" placeholder="Isi profil sekolah..."></textarea>
+<button>Simpan</button>
+</div>
+
+<!-- VISI MISI -->
+<div id="visiMisi" class="page">
+<h2>Visi & Misi</h2>
+<textarea style="width:100%;height:100px" placeholder="Isi visi dan misi..."></textarea>
+<button>Simpan</button>
+</div>
+
+<!-- INPUT SISWA -->
+<div id="inputSiswa" class="page">
+<h2>Input Data Siswa</h2>
+<input id="namaSiswa" placeholder="Nama Siswa">
+<button onclick="tambahSiswa()">Simpan</button>
+</div>
+
+<!-- LIST SISWA -->
+<div id="listSiswa" class="page">
+<h2>Daftar Siswa</h2>
+<table>
+<thead><tr><th>Nama</th></tr></thead>
+<tbody id="tabelSiswa"></tbody>
+</table>
+</div>
+
+<!-- INPUT GURU -->
+<div id="inputGuru" class="page">
+<h2>Input Data Guru</h2>
+<input id="namaGuru" placeholder="Nama Guru">
+<button onclick="tambahGuru()">Simpan</button>
+</div>
+
+<!-- LIST GURU -->
+<div id="listGuru" class="page">
+<h2>Daftar Guru</h2>
+<table>
+<thead><tr><th>Nama</th></tr></thead>
+<tbody id="tabelGuru"></tbody>
+</table>
 </div>
 
 <!-- UPLOAD -->
 <div id="uploadPage" class="page">
 <h2>Upload Dokumen (PDF / Excel)</h2>
 <input type="file" accept=".pdf,.xlsx,.xls" onchange="uploadFile(this)">
-<br>
-<button onclick="downloadLast()">Download Terakhir</button>
 <div id="preview"></div>
 </div>
 
-<!-- DATA -->
+<!-- DATA BERKAS -->
 <div id="dataPage" class="page">
 <h2>Data Berkas Terakhir</h2>
-<div id="fileInfo">Belum ada file diupload</div>
+<div id="fileInfo">Belum ada file</div>
+<button onclick="downloadLast()">Download Terakhir</button>
 </div>
 
 </div>
@@ -83,15 +153,17 @@ input,select{padding:6px;border-radius:6px;border:1px solid #ccc;margin-top:5px}
 
 <script>
 
-const API_SIAPIS="ISI_URL_WEBAPP_ANDA_DISINI";
-
-let role="";
+let siswa=[];
+let guru=[];
 let lastFile=null;
 
 function login(){
-role=document.getElementById("role").value;
 document.getElementById("login").style.display="none";
 document.getElementById("app").style.display="flex";
+}
+
+function logout(){
+location.reload();
 }
 
 function toggleMenu(id){
@@ -104,66 +176,55 @@ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
 document.getElementById(id).classList.add("active");
 }
 
-function uploadFile(input){
+function tambahSiswa(){
+let nama=document.getElementById("namaSiswa").value;
+if(!nama) return alert("Isi nama dulu");
+siswa.push(nama);
+renderSiswa();
+}
 
+function renderSiswa(){
+let tbody=document.getElementById("tabelSiswa");
+tbody.innerHTML="";
+siswa.forEach(n=>{
+tbody.innerHTML+="<tr><td>"+n+"</td></tr>";
+});
+document.getElementById("totalSiswa").innerText=siswa.length;
+}
+
+function tambahGuru(){
+let nama=document.getElementById("namaGuru").value;
+if(!nama) return alert("Isi nama dulu");
+guru.push(nama);
+renderGuru();
+}
+
+function renderGuru(){
+let tbody=document.getElementById("tabelGuru");
+tbody.innerHTML="";
+guru.forEach(n=>{
+tbody.innerHTML+="<tr><td>"+n+"</td></tr>";
+});
+document.getElementById("totalGuru").innerText=guru.length;
+}
+
+function uploadFile(input){
 const file=input.files[0];
 if(!file) return alert("Pilih file dulu");
-
 lastFile=file;
-
-document.getElementById("fileInfo").innerHTML=
-"Nama File: "+file.name+"<br>Ukuran: "+(file.size/1024).toFixed(2)+" KB";
+document.getElementById("fileInfo").innerHTML=file.name;
 
 if(file.name.endsWith(".xlsx")||file.name.endsWith(".xls")){
-readExcel(file);
-}else{
-document.getElementById("preview").innerHTML=
-"<p>File PDF siap diupload.</p>";
-}
-
-const reader=new FileReader();
-
-reader.onload=function(e){
-const base64=e.target.result.split(",")[1];
-
-fetch(API_SIAPIS,{
-method:"POST",
-headers:{ "Content-Type":"application/json" },
-body:JSON.stringify({
-name:file.name,
-type:file.type,
-file:base64
-})
-})
-.then(res=>res.text())
-.then(()=>alert("✅ Upload berhasil"))
-.catch(()=>alert("❌ Upload gagal"));
-};
-
-reader.readAsDataURL(file);
-}
-
-function readExcel(file){
 const reader=new FileReader();
 reader.onload=function(e){
 const data=new Uint8Array(e.target.result);
 const workbook=XLSX.read(data,{type:"array"});
 const sheet=workbook.Sheets[workbook.SheetNames[0]];
 const json=XLSX.utils.sheet_to_json(sheet);
-
-let html="<h3>Preview Excel:</h3><table border='1' cellpadding='5'>";
-json.forEach(row=>{
-html+="<tr>";
-for(let key in row){
-html+="<td>"+row[key]+"</td>";
-}
-html+="</tr>";
-});
-html+="</table>";
-
-document.getElementById("preview").innerHTML=html;
+document.getElementById("preview").innerHTML="<pre>"+JSON.stringify(json,null,2)+"</pre>";
 };
 reader.readAsArrayBuffer(file);
+}
 }
 
 function downloadLast(){
