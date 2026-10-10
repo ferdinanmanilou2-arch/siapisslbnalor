@@ -1,242 +1,569 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SIAPIS - Sistem Informasi Administrasi Sekolah</title>
-
-<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SIAPIS | SLB Negeri Alor</title>
 <style>
-body{margin:0;font-family:Arial;background:#eef2ff}
-.app{display:flex;height:100vh}
-.sidebar{width:270px;background:#1e3a8a;color:white;padding:15px;overflow:auto}
-.sidebar h2{margin-top:0}
-.menu{cursor:pointer;padding:10px;border-radius:8px;margin-top:5px}
-.menu:hover{background:#2563eb}
-.submenu{display:none;padding-left:15px}
-.submenu div{padding:8px;border-radius:6px;cursor:pointer}
-.submenu div:hover{background:#3b82f6}
-.content{flex:1;padding:20px;overflow:auto}
-.page{display:none;background:white;padding:20px;border-radius:15px}
-.active{display:block}
-.login{position:fixed;top:0;left:0;width:100%;height:100%;background:#1e3a8a;color:white;display:flex;align-items:center;justify-content:center;flex-direction:column}
-button{padding:8px;border:none;border-radius:6px;background:#2563eb;color:white;cursor:pointer;margin-top:5px}
-input,select{padding:6px;border-radius:6px;border:1px solid #ccc;margin-top:5px}
-.card{background:#f9fafb;padding:15px;border-radius:10px;margin-top:10px}
-table{border-collapse:collapse;width:100%;margin-top:10px}
-table,th,td{border:1px solid #ccc}
-th,td{padding:8px;text-align:left}
+:root{--primary:#176b87;--secondary:#dff4f3;--bg:#f4f8fb;--text:#233746;--white:#fff;--danger:#c0392b;--border:#dce6ec}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;border:0;border-radius:9px;padding:10px 14px;background:var(--primary);color:white}
+button:hover{filter:brightness(.94)}
+button.secondary{background:#e7eff4;color:#234}
+button.danger{background:var(--danger)}
+input,select,textarea{width:100%;padding:11px;border:1px solid var(--border);border-radius:8px;background:white}
+label{display:block;font-size:13px;font-weight:bold;margin:10px 0 5px}
+.topbar{background:linear-gradient(120deg,#176b87,#36a6a0);color:white;padding:17px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.topbar h1{font-size:21px;margin:0 0 5px}
+.topbar p{margin:0;font-size:13px}
+.layout{display:grid;grid-template-columns:235px minmax(0,1fr);min-height:calc(100vh - 75px)}
+.sidebar{background:white;padding:15px;border-right:1px solid var(--border)}
+.navbtn{display:block;width:100%;text-align:left;background:white;color:var(--text);margin:4px 0;padding:12px}
+.navbtn:hover,.navbtn.active{background:var(--secondary);color:#105e71}
+.content{padding:22px;min-width:0}
+.page{display:none}.page.active{display:block}
+h2{margin-top:0;font-size:23px}
+.muted{color:#667985;font-size:13px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:14px;margin:20px 0}
+.card,.panel{background:white;border:1px solid var(--border);border-radius:14px;padding:17px;box-shadow:0 3px 12px #183b4b08}
+.stat{font-size:29px;font-weight:bold;color:var(--primary);margin-top:10px}
+.panel{margin:14px 0}
+.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;background:white;font-size:14px}
+th,td{padding:11px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+th{background:#edf6f8}
+td button{padding:7px 9px;margin:2px;font-size:12px}
+.notice{padding:12px;background:#fff8df;border-radius:9px;font-size:13px;line-height:1.5}
+#login{position:fixed;inset:0;z-index:10;background:linear-gradient(135deg,#dff4f3,#edf3ff);display:flex;align-items:center;justify-content:center;padding:18px}
+.loginbox{background:white;border-radius:18px;padding:26px;width:100%;max-width:400px;box-shadow:0 12px 45px #183b4b20}
+.loginbox h2{color:var(--primary)}
+#app[hidden],#login[hidden]{display:none!important}
+footer{font-size:12px;color:#73838d;text-align:center;padding:20px}
+@media(max-width:700px){
+ .layout{grid-template-columns:1fr}
+ .sidebar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;border-right:0;border-bottom:1px solid var(--border)}
+ .navbtn{font-size:13px;padding:10px}
+ .content{padding:14px}
+ .topbar{padding:14px}
+ .topbar h1{font-size:18px}
+ .formgrid{grid-template-columns:1fr}
+}
 </style>
 </head>
-
 <body>
 
-<!-- LOGIN -->
-<div id="login" class="login">
-<h2>LOGIN SIAPIS RESMI</h2>
-<select id="role">
-<option>Admin</option>
-<option>Guru</option>
-<option>Operator</option>
-</select>
-<button onclick="login()">Masuk</button>
+<div id="login">
+ <div class="loginbox">
+  <h2>SIAPIS</h2>
+  <p><b>Sistem Informasi Administrasi dan Profil Sekolah</b></p>
+  <p class="muted">SLB Negeri Alor</p>
+  <div class="notice">Ini adalah login tampilan untuk tahap percobaan. Belum memverifikasi akun Google atau melindungi data dengan autentikasi server.</div>
+  <label for="loginName">Nama pengguna</label>
+  <input id="loginName" placeholder="Contoh: Admin SIAPIS">
+  <label for="loginRole">Masuk sebagai</label>
+  <select id="loginRole">
+   <option>Admin</option><option>Guru</option><option>Operator</option>
+  </select>
+  <div class="actions"><button style="width:100%" onclick="masuk()">Masuk ke SIAPIS</button></div>
+ </div>
 </div>
 
-<!-- APP -->
-<div id="app" class="app" style="display:none">
+<div id="app" hidden>
+ <header class="topbar">
+  <div><h1>SIAPIS SLB NEGERI ALOR</h1><p>Sistem Informasi Administrasi & Profil Sekolah</p></div>
+  <button class="secondary" onclick="keluar()">Keluar</button>
+ </header>
 
-<div class="sidebar">
-<h2>SIAPIS</h2>
+ <div class="layout">
+  <nav class="sidebar">
+   <button class="navbtn active" data-page="dashboard" onclick="buka('dashboard',this)">🏠 Dasbor</button>
+   <button class="navbtn" data-page="profil" onclick="buka('profil',this)">🏫 Profil Sekolah</button>
+   <button class="navbtn" data-page="visimisi" onclick="buka('visimisi',this)">🎯 Visi & Misi</button>
+   <button class="navbtn" data-page="siswa" onclick="buka('siswa',this)">👨‍🎓 Data Siswa</button>
+   <button class="navbtn" data-page="guru" onclick="buka('guru',this)">👩‍🏫 Data Guru & Tendik</button>
+   <button class="navbtn" data-page="dokumen" onclick="buka('dokumen',this)">📁 Arsip Dokumen</button>
+   <button class="navbtn" data-page="panduan" onclick="buka('panduan',this)">ℹ️ Panduan & Status</button>
+  </nav>
 
-<div class="menu" onclick="showPage('dashboard')">🏠 Dashboard</div>
+  <main class="content">
+   <section id="dashboard" class="page active">
+    <h2>Selamat datang di SIAPIS</h2>
+    <p class="muted">Pusat administrasi SLB Negeri Alor.</p>
+    <div class="cards">
+     <div class="card">Jumlah Siswa<div class="stat" id="totalSiswa">0</div></div>
+     <div class="card">Guru & Tenaga Kependidikan<div class="stat" id="totalGuru">0</div></div>
+     <div class="card">Arsip Berkas<div class="stat" id="totalDokumen">0</div></div>
+    </div>
+    <div class="panel">
+     <h3>Akses cepat</h3>
+     <div class="actions">
+      <button onclick="bukaDenganId('siswa')">Kelola Data Siswa</button>
+      <button onclick="bukaDenganId('guru')">Kelola Data Guru</button>
+      <button onclick="bukaDenganId('dokumen')">Arsip Dokumen</button>
+     </div>
+    </div>
+    <div class="notice">Perhatian: data pada versi ini tersimpan di browser yang digunakan. Data tidak otomatis tersinkron ke HP atau komputer lain.</div>
+   </section>
 
-<div class="menu" onclick="toggleMenu('sekolahMenu')">🏫 Data Sekolah ▼</div>
-<div id="sekolahMenu" class="submenu">
-<div onclick="showPage('profilSekolah')">Profil Sekolah</div>
-<div onclick="showPage('visiMisi')">Visi & Misi</div>
-</div>
+   <section id="profil" class="page">
+    <h2>Profil Sekolah</h2>
+    <div class="panel">
+     <label for="namaSekolah">Nama Sekolah</label>
+     <input id="namaSekolah" value="SLB Negeri Alor">
+     <label for="alamatSekolah">Alamat Sekolah</label>
+     <textarea id="alamatSekolah" rows="2" placeholder="Masukkan alamat sekolah"></textarea>
+     <label for="sejarahSekolah">Latar Belakang / Sejarah</label>
+     <textarea id="sejarahSekolah" rows="5" placeholder="Tuliskan profil dan sejarah sekolah"></textarea>
+     <div class="actions"><button onclick="simpanProfil()">Simpan Profil</button></div>
+    </div>
+   </section>
 
-<div class="menu" onclick="toggleMenu('siswaMenu')">👨‍🎓 Data Siswa ▼</div>
-<div id="siswaMenu" class="submenu">
-<div onclick="showPage('inputSiswa')">Input Siswa</div>
-<div onclick="showPage('listSiswa')">Daftar Siswa</div>
-</div>
+   <section id="visimisi" class="page">
+    <h2>Visi, Misi dan Tujuan</h2>
+    <div class="panel">
+     <label for="visi">Visi Sekolah</label>
+     <textarea id="visi" rows="3" placeholder="Masukkan visi sekolah"></textarea>
+     <label for="misi">Misi Sekolah</label>
+     <textarea id="misi" rows="5" placeholder="Masukkan misi sekolah"></textarea>
+     <label for="tujuan">Tujuan Sekolah</label>
+     <textarea id="tujuan" rows="4" placeholder="Masukkan tujuan sekolah"></textarea>
+     <div class="actions"><button onclick="simpanVisi()">Simpan Visi & Misi</button></div>
+    </div>
+   </section>
 
-<div class="menu" onclick="toggleMenu('guruMenu')">👩‍🏫 Data Guru ▼</div>
-<div id="guruMenu" class="submenu">
-<div onclick="showPage('inputGuru')">Input Guru</div>
-<div onclick="showPage('listGuru')">Daftar Guru</div>
-</div>
+   <section id="siswa" class="page">
+    <h2>Data Siswa</h2>
+    <div class="panel">
+     <h3 id="judulFormSiswa">Formulir Siswa</h3>
+     <input id="siswaId" type="hidden">
+     <div class="formgrid">
+      <div><label for="sNama">Nama Lengkap *</label><input id="sNama" placeholder="Nama siswa"></div>
+      <div><label for="sNisn">NISN</label><input id="sNisn" placeholder="Nomor induk siswa nasional"></div>
+      <div><label for="sKelas">Kelas</label>
+       <select id="sKelas">
+        <option value="">Pilih kelas</option>
+        <option>SD Kelas 1</option><option>SD Kelas 2</option><option>SD Kelas 3</option>
+        <option>SD Kelas 4</option><option>SD Kelas 5</option><option>SD Kelas 6</option>
+        <option>SMP Kelas VII</option><option>SMP Kelas VIII</option><option>SMP Kelas IX</option>
+        <option>SMA Kelas X</option><option>SMA Kelas XI</option><option>SMA Kelas XII</option>
+       </select>
+      </div>
+      <div><label for="sJK">Jenis Kelamin</label><select id="sJK"><option value="">Pilih</option><option>Laki-laki</option><option>Perempuan</option></select></div>
+      <div><label for="sTahun">Tahun Masuk</label><input id="sTahun" type="number" placeholder="2026"></div>
+     </div>
+     <div class="actions"><button onclick="simpanSiswa()">Simpan Siswa</button><button class="secondary" onclick="resetSiswa()">Batal / Bersihkan</button></div>
+    </div>
+    <div class="panel">
+     <h3>Daftar Siswa</h3>
+     <label for="cariSiswa">Cari nama, NISN, atau kelas</label>
+     <input id="cariSiswa" oninput="renderSiswa()" placeholder="Ketik untuk mencari...">
+     <div class="actions"><button onclick="ekspor('siswa')">Ekspor CSV / Excel</button></div>
+     <div class="tablewrap"><table><thead><tr><th>No.</th><th>Nama</th><th>NISN</th><th>Kelas</th><th>JK</th><th>Aksi</th></tr></thead><tbody id="tabelSiswa"></tbody></table></div>
+    </div>
+   </section>
 
-<div class="menu" onclick="toggleMenu('dokumenMenu')">📁 Dokumen ▼</div>
-<div id="dokumenMenu" class="submenu">
-<div onclick="showPage('uploadPage')">Upload Berkas</div>
-<div onclick="showPage('dataPage')">Data Berkas</div>
-</div>
+   <section id="guru" class="page">
+    <h2>Data Guru & Tenaga Kependidikan</h2>
+    <div class="panel">
+     <h3 id="judulFormGuru">Formulir Guru / Tendik</h3>
+     <input id="guruId" type="hidden">
+     <div class="formgrid">
+      <div><label for="gNama">Nama Lengkap *</label><input id="gNama" placeholder="Nama lengkap"></div>
+      <div><label for="gNip">NIP / NIPPPK (jika ada)</label><input id="gNip" placeholder="Nomor identitas pegawai"></div>
+      <div><label for="gJabatan">Jabatan</label><input id="gJabatan" placeholder="Guru / Tenaga Administrasi"></div>
+      <div><label for="gStatus">Status Kepegawaian</label><select id="gStatus"><option value="">Pilih status</option><option>PNS</option><option>PPPK</option><option>Honorer</option><option>Lainnya</option></select></div>
+     </div>
+     <div class="actions"><button onclick="simpanGuru()">Simpan Data</button><button class="secondary" onclick="resetGuru()">Batal / Bersihkan</button></div>
+    </div>
+    <div class="panel">
+     <h3>Daftar Guru & Tendik</h3>
+     <label for="cariGuru">Cari nama, jabatan, atau NIP</label>
+     <input id="cariGuru" oninput="renderGuru()" placeholder="Ketik untuk mencari...">
+     <div class="actions"><button onclick="ekspor('guru')">Ekspor CSV / Excel</button></div>
+     <div class="tablewrap"><table><thead><tr><th>No.</th><th>Nama</th><th>NIP / NIPPPK</th><th>Jabatan</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="tabelGuru"></tbody></table></div>
+    </div>
+   </section>
 
-<div class="menu" onclick="logout()">🚪 Logout</div>
+   <section id="dokumen" class="page">
+    <h2>Arsip Dokumen</h2>
+    <div class="notice">Berkas disimpan di browser ini dengan batas ukuran 1 MB per berkas. Jangan unggah dokumen berisi informasi pribadi sensitif pada versi percobaan.</div>
+    <div class="panel">
+     <label for="namaDokumen">Nama / Keterangan Berkas</label>
+     <input id="namaDokumen" placeholder="Contoh: Surat Keputusan">
+     <label for="fileDokumen">Pilih berkas (maksimal 1 MB)</label>
+     <input id="fileDokumen" type="file">
+     <div class="actions"><button onclick="simpanDokumen()">Simpan Berkas</button></div>
+    </div>
+    <div class="panel">
+     <h3>Daftar Arsip</h3>
+     <div class="tablewrap"><table><thead><tr><th>No.</th><th>Nama Berkas</th><th>Ukuran</th><th>Aksi</th></tr></thead><tbody id="tabelDokumen"></tbody></table></div>
+    </div>
+   </section>
 
-</div>
-
-<div class="content">
-
-<!-- DASHBOARD -->
-<div id="dashboard" class="page active">
-<h2>Dashboard SIAPIS</h2>
-<div class="card">Jumlah Siswa: <span id="totalSiswa">0</span></div>
-<div class="card">Jumlah Guru: <span id="totalGuru">0</span></div>
-</div>
-
-<!-- PROFIL SEKOLAH -->
-<div id="profilSekolah" class="page">
-<h2>Profil Sekolah</h2>
-<textarea style="width:100%;height:100px" placeholder="Isi profil sekolah..."></textarea>
-<button>Simpan</button>
-</div>
-
-<!-- VISI MISI -->
-<div id="visiMisi" class="page">
-<h2>Visi & Misi</h2>
-<textarea style="width:100%;height:100px" placeholder="Isi visi dan misi..."></textarea>
-<button>Simpan</button>
-</div>
-
-<!-- INPUT SISWA -->
-<div id="inputSiswa" class="page">
-<h2>Input Data Siswa</h2>
-<input id="namaSiswa" placeholder="Nama Siswa">
-<button onclick="tambahSiswa()">Simpan</button>
-</div>
-
-<!-- LIST SISWA -->
-<div id="listSiswa" class="page">
-<h2>Daftar Siswa</h2>
-<table>
-<thead><tr><th>Nama</th></tr></thead>
-<tbody id="tabelSiswa"></tbody>
-</table>
-</div>
-
-<!-- INPUT GURU -->
-<div id="inputGuru" class="page">
-<h2>Input Data Guru</h2>
-<input id="namaGuru" placeholder="Nama Guru">
-<button onclick="tambahGuru()">Simpan</button>
-</div>
-
-<!-- LIST GURU -->
-<div id="listGuru" class="page">
-<h2>Daftar Guru</h2>
-<table>
-<thead><tr><th>Nama</th></tr></thead>
-<tbody id="tabelGuru"></tbody>
-</table>
-</div>
-
-<!-- UPLOAD -->
-<div id="uploadPage" class="page">
-<h2>Upload Dokumen (PDF / Excel)</h2>
-<input type="file" accept=".pdf,.xlsx,.xls" onchange="uploadFile(this)">
-<div id="preview"></div>
-</div>
-
-<!-- DATA BERKAS -->
-<div id="dataPage" class="page">
-<h2>Data Berkas Terakhir</h2>
-<div id="fileInfo">Belum ada file</div>
-<button onclick="downloadLast()">Download Terakhir</button>
-</div>
-
-</div>
+   <section id="panduan" class="page">
+    <h2>Panduan & Status Aplikasi</h2>
+    <div class="panel">
+     <h3>Status versi percobaan</h3>
+     <p>Versi: SIAPIS Tahap 1</p>
+     <p>Penyimpanan: localStorage pada browser ini.</p>
+     <p>Autentikasi: belum terhubung ke server.</p>
+     <p>Database online: belum diaktifkan.</p>
+     <p>Hak akses per peran: belum diterapkan.</p>
+     <p>Unggah dokumen: penyimpanan lokal terbatas.</p>
+    </div>
+    <div class="panel">
+     <h3>Cadangkan data</h3>
+     <p>Gunakan fitur ekspor CSV pada Data Siswa dan Data Guru untuk menyimpan salinan data tabel.</p>
+     <p>Hindari menghapus data browser sebelum data dicadangkan.</p>
+    </div>
+   </section>
+  </main>
+ </div>
+ <footer>SIAPIS SLB Negeri Alor · Versi percobaan Tahap 1</footer>
 </div>
 
 <script>
+"use strict";
 
-let siswa=[];
-let guru=[];
-let lastFile=null;
-
-function login(){
-document.getElementById("login").style.display="none";
-document.getElementById("app").style.display="flex";
-}
-
-function logout(){
-location.reload();
-}
-
-function toggleMenu(id){
-let menu=document.getElementById(id);
-menu.style.display = menu.style.display==="block" ? "none":"block";
-}
-
-function showPage(id){
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-document.getElementById(id).classList.add("active");
-}
-
-function tambahSiswa(){
-let nama=document.getElementById("namaSiswa").value;
-if(!nama) return alert("Isi nama dulu");
-siswa.push(nama);
-renderSiswa();
-}
-
-function renderSiswa(){
-let tbody=document.getElementById("tabelSiswa");
-tbody.innerHTML="";
-siswa.forEach(n=>{
-tbody.innerHTML+="<tr><td>"+n+"</td></tr>";
-});
-document.getElementById("totalSiswa").innerText=siswa.length;
-}
-
-function tambahGuru(){
-let nama=document.getElementById("namaGuru").value;
-if(!nama) return alert("Isi nama dulu");
-guru.push(nama);
-renderGuru();
-}
-
-function renderGuru(){
-let tbody=document.getElementById("tabelGuru");
-tbody.innerHTML="";
-guru.forEach(n=>{
-tbody.innerHTML+="<tr><td>"+n+"</td></tr>";
-});
-document.getElementById("totalGuru").innerText=guru.length;
-}
-
-function uploadFile(input){
-const file=input.files[0];
-if(!file) return alert("Pilih file dulu");
-lastFile=file;
-document.getElementById("fileInfo").innerHTML=file.name;
-
-if(file.name.endsWith(".xlsx")||file.name.endsWith(".xls")){
-const reader=new FileReader();
-reader.onload=function(e){
-const data=new Uint8Array(e.target.result);
-const workbook=XLSX.read(data,{type:"array"});
-const sheet=workbook.Sheets[workbook.SheetNames[0]];
-const json=XLSX.utils.sheet_to_json(sheet);
-document.getElementById("preview").innerHTML="<pre>"+JSON.stringify(json,null,2)+"</pre>";
+const K = {
+ siswa:"siapis_siswa_v1",
+ guru:"siapis_guru_v1",
+ profil:"siapis_profil_v1",
+ visi:"siapis_visi_v1",
+ dokumen:"siapis_dokumen_v1"
 };
-reader.readAsArrayBuffer(file);
-}
+
+let siswa = baca(K.siswa, []);
+let guru = baca(K.guru, []);
+let dokumen = baca(K.dokumen, []);
+
+function baca(kunci, cadangan) {
+ try {
+  const isi = localStorage.getItem(kunci);
+  return isi ? JSON.parse(isi) : cadangan;
+ } catch (e) {
+  console.error("Gagal membaca penyimpanan:", e);
+  return cadangan;
+ }
 }
 
-function downloadLast(){
-if(!lastFile) return alert("Belum ada file");
-const url=URL.createObjectURL(lastFile);
-const a=document.createElement("a");
-a.href=url;
-a.download=lastFile.name;
-a.click();
+function simpan(kunci, data) {
+ try {
+  localStorage.setItem(kunci, JSON.stringify(data));
+  return true;
+ } catch (e) {
+  alert("Data tidak berhasil disimpan. Penyimpanan browser mungkin penuh. Ekspor data yang ada dan kurangi ukuran berkas.");
+  return false;
+ }
 }
 
+function aman(teks) {
+ return String(teks ?? "").replace(/[&<>"']/g, c => ({
+  "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+ }[c]));
+}
+
+function idBaru() {
+ return Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+}
+
+function masuk() {
+ const nama = document.getElementById("loginName").value.trim();
+ if (!nama) {
+  alert("Silakan isi nama pengguna terlebih dahulu.");
+  return;
+ }
+ sessionStorage.setItem("siapis_nama", nama);
+ sessionStorage.setItem("siapis_peran", document.getElementById("loginRole").value);
+ document.getElementById("login").hidden = true;
+ document.getElementById("app").hidden = false;
+ muatSemua();
+}
+
+function keluar() {
+ document.getElementById("app").hidden = true;
+ document.getElementById("login").hidden = false;
+ document.getElementById("loginName").value = "";
+}
+
+function buka(id, tombol) {
+ document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+ const halaman = document.getElementById(id);
+ if (halaman) halaman.classList.add("active");
+ document.querySelectorAll(".navbtn").forEach(b => b.classList.remove("active"));
+ const aktif = tombol || document.querySelector('[data-page="' + id + '"]');
+ if (aktif) aktif.classList.add("active");
+}
+
+function bukaDenganId(id) {
+ buka(id);
+}
+
+function muatSemua() {
+ muatProfil();
+ muatVisi();
+ renderSiswa();
+ renderGuru();
+ renderDokumen();
+ updateStat();
+}
+
+function updateStat() {
+ document.getElementById("totalSiswa").textContent = siswa.length;
+ document.getElementById("totalGuru").textContent = guru.length;
+ document.getElementById("totalDokumen").textContent = dokumen.length;
+}
+
+function resetSiswa() {
+ ["siswaId","sNama","sNisn","sKelas","sJK","sTahun"].forEach(id => document.getElementById(id).value = "");
+ document.getElementById("judulFormSiswa").textContent = "Formulir Siswa";
+}
+
+function simpanSiswa() {
+ const id = document.getElementById("siswaId").value;
+ const nama = document.getElementById("sNama").value.trim();
+ if (!nama) return alert("Nama siswa wajib diisi.");
+
+ const item = {
+  id: id || idBaru(),
+  nama,
+  nisn: document.getElementById("sNisn").value.trim(),
+  kelas: document.getElementById("sKelas").value,
+  jk: document.getElementById("sJK").value,
+  tahun: document.getElementById("sTahun").value
+ };
+
+ const lama = siswa;
+ siswa = id ? siswa.map(x => x.id === id ? item : x) : [...siswa, item];
+ if (!simpan(K.siswa, siswa)) { siswa = lama; return; }
+
+ resetSiswa();
+ renderSiswa();
+ updateStat();
+ alert("Data siswa berhasil disimpan di browser ini.");
+}
+
+function renderSiswa() {
+ const cari = (document.getElementById("cariSiswa")?.value || "").toLowerCase();
+ const hasil = siswa.filter(x => [x.nama,x.nisn,x.kelas].some(v => String(v || "").toLowerCase().includes(cari)));
+ const body = document.getElementById("tabelSiswa");
+ if (!body) return;
+ body.innerHTML = hasil.map((x,i) => `<tr>
+  <td>${i+1}</td><td>${aman(x.nama)}</td><td>${aman(x.nisn)}</td>
+  <td>${aman(x.kelas)}</td><td>${aman(x.jk)}</td>
+  <td><button onclick="editSiswa('${x.id}')">Edit</button><button class="danger" onclick="hapusSiswa('${x.id}')">Hapus</button></td>
+ </tr>`).join("") || '<tr><td colspan="6">Belum ada data siswa.</td></tr>';
+}
+
+function editSiswa(id) {
+ const x = siswa.find(v => v.id === id);
+ if (!x) return;
+ document.getElementById("siswaId").value = x.id;
+ document.getElementById("sNama").value = x.nama || "";
+ document.getElementById("sNisn").value = x.nisn || "";
+ document.getElementById("sKelas").value = x.kelas || "";
+ document.getElementById("sJK").value = x.jk || "";
+ document.getElementById("sTahun").value = x.tahun || "";
+ document.getElementById("judulFormSiswa").textContent = "Edit Data Siswa";
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function hapusSiswa(id) {
+ if (!confirm("Yakin ingin menghapus data siswa ini?")) return;
+ const lama = siswa;
+ siswa = siswa.filter(x => x.id !== id);
+ if (!simpan(K.siswa, siswa)) { siswa = lama; return; }
+ renderSiswa();
+ updateStat();
+}
+
+function resetGuru() {
+ ["guruId","gNama","gNip","gJabatan","gStatus"].forEach(id => document.getElementById(id).value = "");
+ document.getElementById("judulFormGuru").textContent = "Formulir Guru / Tendik";
+}
+
+function simpanGuru() {
+ const id = document.getElementById("guruId").value;
+ const nama = document.getElementById("gNama").value.trim();
+ if (!nama) return alert("Nama guru atau tenaga kependidikan wajib diisi.");
+
+ const item = {
+  id: id || idBaru(),
+  nama,
+  nip: document.getElementById("gNip").value.trim(),
+  jabatan: document.getElementById("gJabatan").value.trim(),
+  status: document.getElementById("gStatus").value
+ };
+
+ const lama = guru;
+ guru = id ? guru.map(x => x.id === id ? item : x) : [...guru, item];
+ if (!simpan(K.guru, guru)) { guru = lama; return; }
+
+ resetGuru();
+ renderGuru();
+ updateStat();
+ alert("Data guru / tendik berhasil disimpan di browser ini.");
+}
+
+function renderGuru() {
+ const cari = (document.getElementById("cariGuru")?.value || "").toLowerCase();
+ const hasil = guru.filter(x => [x.nama,x.nip,x.jabatan,x.status].some(v => String(v || "").toLowerCase().includes(cari)));
+ const body = document.getElementById("tabelGuru");
+ if (!body) return;
+ body.innerHTML = hasil.map((x,i) => `<tr>
+  <td>${i+1}</td><td>${aman(x.nama)}</td><td>${aman(x.nip)}</td>
+  <td>${aman(x.jabatan)}</td><td>${aman(x.status)}</td>
+  <td><button onclick="editGuru('${x.id}')">Edit</button><button class="danger" onclick="hapusGuru('${x.id}')">Hapus</button></td>
+ </tr>`).join("") || '<tr><td colspan="6">Belum ada data guru / tendik.</td></tr>';
+}
+
+function editGuru(id) {
+ const x = guru.find(v => v.id === id);
+ if (!x) return;
+ document.getElementById("guruId").value = x.id;
+ document.getElementById("gNama").value = x.nama || "";
+ document.getElementById("gNip").value = x.nip || "";
+ document.getElementById("gJabatan").value = x.jabatan || "";
+ document.getElementById("gStatus").value = x.status || "";
+ document.getElementById("judulFormGuru").textContent = "Edit Data Guru / Tendik";
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function hapusGuru(id) {
+ if (!confirm("Yakin ingin menghapus data ini?")) return;
+ const lama = guru;
+ guru = guru.filter(x => x.id !== id);
+ if (!simpan(K.guru, guru)) { guru = lama; return; }
+ renderGuru();
+ updateStat();
+}
+
+function muatProfil() {
+ const p = baca(K.profil, {});
+ document.getElementById("namaSekolah").value = p.nama ?? "SLB Negeri Alor";
+ document.getElementById("alamatSekolah").value = p.alamat ?? "";
+ document.getElementById("sejarahSekolah").value = p.sejarah ?? "";
+}
+
+function simpanProfil() {
+ const p = {
+  nama: document.getElementById("namaSekolah").value.trim(),
+  alamat: document.getElementById("alamatSekolah").value.trim(),
+  sejarah: document.getElementById("sejarahSekolah").value.trim()
+ };
+ if (simpan(K.profil, p)) alert("Profil sekolah berhasil disimpan.");
+}
+
+function muatVisi() {
+ const v = baca(K.visi, {});
+ document.getElementById("visi").value = v.visi ?? "";
+ document.getElementById("misi").value = v.misi ?? "";
+ document.getElementById("tujuan").value = v.tujuan ?? "";
+}
+
+function simpanVisi() {
+ const v = {
+  visi: document.getElementById("visi").value,
+  misi: document.getElementById("misi").value,
+  tujuan: document.getElementById("tujuan").value
+ };
+ if (simpan(K.visi, v)) alert("Visi, misi, dan tujuan berhasil disimpan.");
+}
+
+function simpanDokumen() {
+ const input = document.getElementById("fileDokumen");
+ const file = input.files[0];
+ const nama = document.getElementById("namaDokumen").value.trim();
+ if (!file) return alert("Pilih berkas terlebih dahulu.");
+ if (file.size > 1024 * 1024) return alert("Ukuran berkas maksimal 1 MB.");
+ if (dokumen.length >= 15) return alert("Batas percobaan adalah 15 berkas. Hapus atau unduh berkas lama terlebih dahulu.");
+
+ const reader = new FileReader();
+ reader.onload = () => {
+  const item = {
+   id: idBaru(),
+   nama: nama || file.name,
+   fileName: file.name,
+   type: file.type || "application/octet-stream",
+   size: file.size,
+   data: reader.result
+  };
+  const lama = dokumen;
+  dokumen = [...dokumen, item];
+  if (!simpan(K.dokumen, dokumen)) { dokumen = lama; return; }
+  input.value = "";
+  document.getElementById("namaDokumen").value = "";
+  renderDokumen();
+  updateStat();
+  alert("Berkas berhasil disimpan di browser ini.");
+ };
+ reader.onerror = () => alert("Berkas gagal dibaca.");
+ reader.readAsDataURL(file);
+}
+
+function renderDokumen() {
+ const body = document.getElementById("tabelDokumen");
+ if (!body) return;
+ body.innerHTML = dokumen.map((x,i) => `<tr>
+  <td>${i+1}</td><td>${aman(x.nama)}<br><span class="muted">${aman(x.fileName)}</span></td>
+  <td>${(x.size/1024).toFixed(1)} KB</td>
+  <td><button onclick="unduhDokumen('${x.id}')">Unduh</button><button class="danger" onclick="hapusDokumen('${x.id}')">Hapus</button></td>
+ </tr>`).join("") || '<tr><td colspan="4">Belum ada arsip dokumen.</td></tr>';
+}
+
+function unduhDokumen(id) {
+ const x = dokumen.find(v => v.id === id);
+ if (!x) return;
+ const a = document.createElement("a");
+ a.href = x.data;
+ a.download = x.fileName || x.nama || "berkas";
+ document.body.appendChild(a);
+ a.click();
+ a.remove();
+}
+
+function hapusDokumen(id) {
+ if (!confirm("Yakin ingin menghapus berkas ini dari browser?")) return;
+ const lama = dokumen;
+ dokumen = dokumen.filter(x => x.id !== id);
+ if (!simpan(K.dokumen, dokumen)) { dokumen = lama; return; }
+ renderDokumen();
+ updateStat();
+}
+
+function ekspor(jenis) {
+ const data = jenis === "siswa" ? siswa : guru;
+ if (!data.length) return alert("Belum ada data untuk diekspor.");
+ const kolom = jenis === "siswa"
+  ? ["nama","nisn","kelas","jk","tahun"]
+  : ["nama","nip","jabatan","status"];
+ const csv = [
+  kolom.join(";"),
+  ...data.map(x => kolom.map(k => '"' + String(x[k] ?? "").replace(/"/g,'""') + '"').join(";"))
+ ].join("\r\n");
+ const blob = new Blob(["\uFEFF" + csv], {type:"text/csv;charset=utf-8;"});
+ const url = URL.createObjectURL(blob);
+ const a = document.createElement("a");
+ a.href = url;
+ a.download = "SIAPIS_" + jenis + ".csv";
+ document.body.appendChild(a);
+ a.click();
+ a.remove();
+ URL.revokeObjectURL(url);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+ if (sessionStorage.getItem("siapis_nama")) {
+  document.getElementById("login").hidden = true;
+  document.getElementById("app").hidden = false;
+ }
+ muatSemua();
+});
 </script>
-
 </body>
 </html>
