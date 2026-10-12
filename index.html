@@ -62,14 +62,13 @@ footer{font-size:12px;color:#73838d;text-align:center;padding:20px}
   <h2>SIAPIS</h2>
   <p><b>Sistem Informasi Administrasi dan Profil Sekolah</b></p>
   <p class="muted">SLB Negeri Alor</p>
-  <div class="notice">Ini adalah login tampilan untuk tahap percobaan. Belum memverifikasi akun Google atau melindungi data dengan autentikasi server.</div>
-  <label for="loginName">Nama pengguna</label>
-  <input id="loginName" placeholder="Contoh: Admin SIAPIS">
-  <label for="loginRole">Masuk sebagai</label>
-  <select id="loginRole">
-   <option>Admin</option><option>Guru</option><option>Operator</option>
-  </select>
-  <div class="actions"><button style="width:100%" onclick="masuk()">Masuk ke SIAPIS</button></div>
+  <div class="notice">Masuk menggunakan email dan kata sandi akun SIAPIS yang terdaftar. Akun harus diaktifkan oleh Admin.</div>
+  <div id="loginError" class="notice" role="alert" hidden></div>
+  <label for="loginEmail">Email</label>
+  <input id="loginEmail" type="email" autocomplete="username" placeholder="Masukkan email" required>
+  <label for="loginPassword">Kata sandi</label>
+  <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Masukkan kata sandi" required>
+  <div class="actions"><button id="loginButton" style="width:100%" onclick="masuk()">Masuk ke SIAPIS</button></div>
  </div>
 </div>
 
@@ -227,8 +226,14 @@ footer{font-size:12px;color:#73838d;text-align:center;padding:20px}
  <footer>SIAPIS SLB Negeri Alor · Versi percobaan Tahap 1</footer>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 "use strict";
+
+const SUPABASE_URL = "https://fkmumevravxologenmvc.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_eGledUDqF_M-dh9Q81DGhA_VBbDZZ40";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+let profilAktif = null;
 
 const K = {
  siswa:"siapis_siswa_v1",
@@ -272,23 +277,71 @@ function idBaru() {
  return Date.now().toString(36) + Math.random().toString(36).slice(2,8);
 }
 
-function masuk() {
- const nama = document.getElementById("loginName").value.trim();
- if (!nama) {
-  alert("Silakan isi nama pengguna terlebih dahulu.");
-  return;
+function tampilkanLoginError(pesan) {
+ const elemen = document.getElementById("loginError");
+ elemen.textContent = pesan;
+ elemen.hidden = !pesan;
+}
+
+async function periksaProfil(user) {
+ const { data, error } = await supabaseClient
+  .from("profiles")
+  .select("id, full_name, role, active")
+  .eq("id", user.id)
+  .maybeSingle();
+
+ if (error) throw new Error("Tidak dapat memeriksa profil akun. Periksa kebijakan akses tabel profiles di Supabase.");
+ if (!data) throw new Error("Profil akun belum tersedia. Hubungi Admin SIAPIS.");
+ if (!data.active) throw new Error("Akun Anda belum diaktifkan oleh Admin SIAPIS.");
+ if (!["admin", "operator", "guru", "wali_kelas"].includes(data.role)) {
+  throw new Error("Peran akun tidak dikenali. Hubungi Admin SIAPIS.");
  }
- sessionStorage.setItem("siapis_nama", nama);
- sessionStorage.setItem("siapis_peran", document.getElementById("loginRole").value);
+ profilAktif = data;
+ sessionStorage.setItem("siapis_nama", data.full_name || user.email || "Pengguna SIAPIS");
+ sessionStorage.setItem("siapis_peran", data.role);
  document.getElementById("login").hidden = true;
  document.getElementById("app").hidden = false;
+ tampilkanLoginError("");
  muatSemua();
 }
 
-function keluar() {
+async function masuk() {
+ const email = document.getElementById("loginEmail").value.trim();
+ const password = document.getElementById("loginPassword").value;
+ const tombol = document.getElementById("loginButton");
+
+ tampilkanLoginError("");
+ if (!email || !password) {
+  tampilkanLoginError("Masukkan email dan kata sandi terlebih dahulu.");
+  return;
+ }
+
+ tombol.disabled = true;
+ tombol.textContent = "Memeriksa akun...";
+ try {
+  const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+  if (error) throw new Error("Email atau kata sandi salah, atau akun belum dapat masuk.");
+  await periksaProfil(data.user);
+ } catch (error) {
+  await supabaseClient.auth.signOut();
+  document.getElementById("app").hidden = true;
+  document.getElementById("login").hidden = false;
+  tampilkanLoginError(error.message || "Login gagal. Silakan coba kembali.");
+ } finally {
+  tombol.disabled = false;
+  tombol.textContent = "Masuk ke SIAPIS";
+ }
+}
+
+async function keluar() {
+ await supabaseClient.auth.signOut();
+ profilAktif = null;
+ sessionStorage.removeItem("siapis_nama");
+ sessionStorage.removeItem("siapis_peran");
  document.getElementById("app").hidden = true;
  document.getElementById("login").hidden = false;
- document.getElementById("loginName").value = "";
+ document.getElementById("loginPassword").value = "";
+ tampilkanLoginError("");
 }
 
 function buka(id, tombol) {
@@ -557,12 +610,23 @@ function ekspor(jenis) {
  URL.revokeObjectURL(url);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
- if (sessionStorage.getItem("siapis_nama")) {
-  document.getElementById("login").hidden = true;
-  document.getElementById("app").hidden = false;
+document.addEventListener("DOMContentLoaded", async () => {
+ document.getElementById("login").hidden = false;
+ document.getElementById("app").hidden = true;
+ try {
+  const { data, error } = await supabaseClient.auth.getSession();
+  if (error) throw error;
+  if (data.session && data.session.user) {
+   try {
+    await periksaProfil(data.session.user);
+   } catch (profileError) {
+    await supabaseClient.auth.signOut();
+    tampilkanLoginError(profileError.message || "Akun belum dapat digunakan.");
+   }
+  }
+ } catch (error) {
+  tampilkanLoginError("Tidak dapat menghubungi layanan login Supabase. Periksa koneksi internet lalu muat ulang halaman.");
  }
- muatSemua();
 });
 </script>
 </body>
