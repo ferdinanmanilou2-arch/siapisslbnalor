@@ -2,94 +2,127 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin SIAPIS</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dasbor SIAPIS | SLB Negeri Alor</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-body{
-font-family:Arial;
-margin:0;
-background:#f2f6ff;
-}
-
-header{
-background:#0d6efd;
-color:white;
-padding:15px;
-text-align:center;
-}
-
-.container{
-padding:20px;
-}
-
-form{
-background:white;
-padding:20px;
-border-radius:15px;
-box-shadow:0 4px 8px rgba(0,0,0,0.1);
-}
-
-input, textarea{
-width:100%;
-padding:10px;
-margin-top:10px;
-margin-bottom:15px;
-border-radius:8px;
-border:1px solid #ccc;
-}
-
-button{
-background:#0d6efd;
-color:white;
-padding:12px;
-border:none;
-border-radius:10px;
-width:100%;
-font-size:16px;
-}
-
-button:hover{
-background:#0b5ed7;
-}
+:root{--navy:#163b67;--blue:#2878c8;--sky:#eaf4ff;--ink:#21324a;--muted:#708198;--line:#e5edf6;--white:#fff;--bg:#f4f8fd;--teal:#19a89a;--gold:#f0b84b;--violet:#8a78db}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;color:var(--ink);background:var(--bg)}button{font:inherit;cursor:pointer}.app{min-height:100vh}.sidebar{position:fixed;inset:0 auto 0 0;width:258px;background:linear-gradient(180deg,#163b67,#102d50);color:#fff;padding:22px 15px;overflow-y:auto;z-index:5;transition:transform .25s}.brand{display:flex;align-items:center;gap:12px;padding:2px 8px 24px;border-bottom:1px solid #ffffff25}.logo{width:45px;height:45px;border-radius:14px;background:linear-gradient(135deg,#80d6ff,#fff);display:grid;place-items:center;color:#16416f;font-size:22px;font-weight:800}.brand h1{font-size:17px;line-height:1.2;margin:0}.brand p{font-size:11px;color:#c5dcf6;margin:5px 0 0}.navlabel{font-size:10px;letter-spacing:1.5px;color:#9db7d5;margin:22px 12px 9px}.nav{display:grid;gap:5px}.nav button{width:100%;display:flex;align-items:center;gap:12px;border:0;border-radius:11px;background:transparent;color:#d9e8fa;padding:12px 13px;text-align:left;font-size:13px}.nav button .ico{width:22px;text-align:center;font-size:17px}.nav button:hover,.nav button.active{background:#ffffff1c;color:#fff}.nav button.active{box-shadow:inset 3px 0 #7ed9ff}.sidebar-note{margin:25px 5px 5px;padding:13px;border:1px solid #ffffff24;border-radius:13px;color:#d4e4f7;font-size:11px;line-height:1.6}.main{margin-left:258px;min-height:100vh}.topbar{height:76px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 30px;gap:15px;position:sticky;top:0;z-index:3}.top-left{display:flex;align-items:center;gap:12px}.hamb{display:none;border:0;background:var(--sky);border-radius:10px;padding:9px 11px;color:var(--navy)}.eyebrow{font-size:11px;color:var(--muted);margin:0 0 4px}.topbar h2{font-size:19px;margin:0;color:var(--navy)}.userbox{display:flex;align-items:center;gap:11px}.avatar{width:39px;height:39px;border-radius:13px;background:#d9ecff;color:#1e5b95;display:grid;place-items:center;font-weight:800}.usertext strong{display:block;font-size:12px}.usertext span{font-size:11px;color:var(--muted)}.logout{border:1px solid var(--line);background:white;color:#53657b;border-radius:10px;padding:9px 12px;font-size:12px}.content{padding:28px;max-width:1500px;margin:auto}.welcome{background:linear-gradient(115deg,#1e5e9e,#328fd0 65%,#64c8d8);border-radius:22px;padding:27px 30px;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:20px;overflow:hidden;position:relative;box-shadow:0 12px 30px #236fb322}.welcome:after{content:"";position:absolute;width:230px;height:230px;border:35px solid #ffffff17;border-radius:50%;right:9%;top:-100px}.welcome h3{font-size:25px;margin:0 0 9px;position:relative;z-index:1}.welcome p{margin:0;color:#e2f3ff;font-size:13px;line-height:1.6;max-width:600px;position:relative;z-index:1}.welcome-tag{position:relative;z-index:1;background:#ffffff22;border:1px solid #ffffff42;padding:12px 15px;border-radius:14px;font-size:12px;white-space:nowrap}.sectionhead{display:flex;align-items:end;justify-content:space-between;gap:10px;margin:27px 0 15px}.sectionhead h3{font-size:16px;margin:0;color:var(--navy)}.sectionhead p{font-size:12px;color:var(--muted);margin:5px 0 0}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}.stat{background:#fff;border:1px solid var(--line);border-radius:17px;padding:18px;min-width:0;box-shadow:0 4px 12px #183c5b05}.stat-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.stat-label{font-size:12px;color:var(--muted)}.stat-icon{width:39px;height:39px;border-radius:13px;display:grid;place-items:center;font-size:18px}.stat strong{display:block;font-size:26px;margin:14px 0 5px;color:var(--navy)}.stat small{font-size:11px;color:var(--muted)}.c-blue{background:#e5f2ff}.c-teal{background:#ddf8f1}.c-gold{background:#fff3d8}.c-violet{background:#eee9ff}.lower{display:grid;grid-template-columns:1.35fr 1fr;gap:16px;margin-top:17px}.panel{background:white;border:1px solid var(--line);border-radius:17px;padding:20px}.panel h3{font-size:14px;margin:0 0 5px;color:var(--navy)}.panel .sub{font-size:11px;color:var(--muted);margin:0 0 16px}.quickgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.quick{border:1px solid var(--line);background:#fbfdff;border-radius:13px;padding:13px 10px;text-align:left;color:var(--ink);min-height:92px}.quick:hover{border-color:#9bc9f3;background:#f2f8ff}.quick span{display:block;font-size:20px;margin-bottom:9px}.quick strong{font-size:11px;line-height:1.4}.activity{display:grid;gap:12px}.activityrow{display:flex;align-items:flex-start;gap:11px;font-size:12px;line-height:1.5}.activityicon{width:30px;height:30px;flex:none;border-radius:10px;background:#edf5ff;display:grid;place-items:center}.activityrow p{margin:0;color:var(--muted)}.activityrow strong{color:var(--ink)}.foot{text-align:center;color:#8b9aae;font-size:10px;padding:24px}.moduleview{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px;min-height:260px}.moduleview h3{margin:0 0 8px;color:var(--navy)}.moduleview p{color:var(--muted);font-size:13px;line-height:1.7}.modulebadge{display:inline-block;background:#fff3d8;color:#825c0a;padding:7px 10px;border-radius:9px;font-size:11px;margin-top:8px}.overlay{display:none}
+@media(max-width:1100px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.lower{grid-template-columns:1fr}}
+@media(max-width:760px){.sidebar{transform:translateX(-100%);width:270px}.sidebar.open{transform:translateX(0)}.overlay.show{display:block;position:fixed;inset:0;background:#102d5066;z-index:4}.main{margin-left:0}.topbar{height:68px;padding:0 15px}.hamb{display:block}.usertext{display:none}.logout{padding:8px 9px}.content{padding:16px}.welcome{padding:22px;border-radius:18px}.welcome h3{font-size:21px}.welcome-tag{display:none}.sectionhead{margin-top:23px}.stats{gap:10px}.stat{padding:14px}.stat strong{font-size:23px}.quickgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.panel{padding:16px}}
+@media(max-width:380px){.stats{grid-template-columns:1fr}.topbar h2{font-size:16px}}
 </style>
-
 </head>
-
 <body>
-
-<header>
-<h2>Admin SIAPIS - Input Data Sekolah</h2>
-</header>
-
-<div class="container">
-
-<form>
-
-<label>Nama Sekolah</label>
-<input type="text" placeholder="Masukkan nama sekolah">
-
-<label>Alamat Sekolah</label>
-<input type="text" placeholder="Masukkan alamat">
-
-<label>Nama Kepala Sekolah</label>
-<input type="text" placeholder="Nama kepala sekolah">
-
-<label>Jumlah Siswa</label>
-<input type="number" placeholder="Jumlah siswa">
-
-<label>Logo Sekolah</label>
-<input type="file">
-
-<label>Deskripsi Sekolah</label>
-<textarea rows="4" placeholder="Deskripsi singkat sekolah"></textarea>
-
-<button type="submit">Simpan Data</button>
-
-</form>
-
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><div class="logo">S</div><div><h1>SIAPIS</h1><p>SLB NEGERI ALOR</p></div></div>
+    <div class="navlabel">MENU UTAMA</div>
+    <nav class="nav" id="navigation">
+      <button class="active" data-page="dashboard"><span class="ico">▦</span>Dasbor</button>
+      <button data-page="profil"><span class="ico">🏫</span>Profil Sekolah</button>
+      <button data-page="induk"><span class="ico">👥</span>Data Induk Sekolah</button>
+      <button data-page="siswa"><span class="ico">🎒</span>Data Siswa</button>
+      <button data-page="ppdb"><span class="ico">📝</span>PPDB</button>
+      <button data-page="arsip"><span class="ico">🗂️</span>Arsip Dokumen</button>
+      <button data-page="sarpras"><span class="ico">🏢</span>Sarana Prasarana</button>
+      <button data-page="seni"><span class="ico">🎨</span>Seni Budaya</button>
+      <button data-page="olahraga"><span class="ico">⚽</span>Olahraga</button>
+      <button data-page="kegiatan"><span class="ico">📅</span>Kegiatan & Pengumuman</button>
+      <div class="navlabel">PENGELOLAAN</div>
+      <button data-page="kontrol"><span class="ico">🛡️</span>Kontrol Admin</button>
+      <button data-page="pengaturan"><span class="ico">⚙️</span>Pengaturan</button>
+    </nav>
+    <div class="sidebar-note">💙 <strong>Ruang Administrasi Digital</strong><br>Kelola informasi sekolah dalam satu tempat. Modul akan dihubungkan bertahap ke database.</div>
+  </aside>
+  <div class="overlay" id="overlay"></div>
+  <main class="main">
+    <header class="topbar">
+      <div class="top-left"><button class="hamb" id="hamb" aria-label="Buka menu">☰</button><div><p class="eyebrow">SISTEM INFORMASI SEKOLAH</p><h2 id="pageTitle">Dasbor Utama</h2></div></div>
+      <div class="userbox"><div class="avatar">A</div><div class="usertext"><strong id="userName">Admin SIAPIS</strong><span id="userEmail">Memeriksa sesi...</span></div><button class="logout" id="logout">Keluar ↗</button></div>
+    </header>
+    <div class="content" id="content">
+      <section class="welcome">
+        <div><h3>Selamat datang di SIAPIS 👋</h3><p>Sistem Informasi Administrasi dan Profil Sekolah SLB Negeri Alor. Kelola informasi dan administrasi sekolah dengan tampilan yang lebih rapi, mudah, dan terpusat.</p></div>
+        <div class="welcome-tag">✦ Administrasi Sekolah Digital</div>
+      </section>
+      <div class="sectionhead"><div><h3>Ringkasan Sekolah</h3><p>Ringkasan data akan tampil setelah modul database diaktifkan.</p></div></div>
+      <section class="stats">
+        <article class="stat"><div class="stat-top"><span class="stat-label">Peserta Didik</span><span class="stat-icon c-blue">🎒</span></div><strong>—</strong><small>Menunggu koneksi data siswa</small></article>
+        <article class="stat"><div class="stat-top"><span class="stat-label">Guru & Tendik</span><span class="stat-icon c-teal">👥</span></div><strong>—</strong><small>Menunggu koneksi data PTK</small></article>
+        <article class="stat"><div class="stat-top"><span class="stat-label">Arsip Dokumen</span><span class="stat-icon c-gold">🗂️</span></div><strong>—</strong><small>Menunggu modul arsip</small></article>
+        <article class="stat"><div class="stat-top"><span class="stat-label">Kegiatan Sekolah</span><span class="stat-icon c-violet">📅</span></div><strong>—</strong><small>Menunggu modul kegiatan</small></article>
+      </section>
+      <div class="lower">
+        <section class="panel"><h3>Akses Cepat</h3><p class="sub">Pilih menu yang ingin dibuka.</p><div class="quickgrid">
+          <button class="quick" data-page="siswa"><span>🎒</span><strong>Data Siswa</strong></button>
+          <button class="quick" data-page="induk"><span>👥</span><strong>Data Guru & Tendik</strong></button>
+          <button class="quick" data-page="ppdb"><span>📝</span><strong>Penerimaan Peserta Didik</strong></button>
+          <button class="quick" data-page="arsip"><span>🗂️</span><strong>Arsip Dokumen</strong></button>
+          <button class="quick" data-page="sarpras"><span>🏢</span><strong>Sarana Prasarana</strong></button>
+          <button class="quick" data-page="kegiatan"><span>📅</span><strong>Kegiatan Sekolah</strong></button>
+        </div></section>
+        <section class="panel"><h3>Informasi Sistem</h3><p class="sub">Status awal aplikasi</p><div class="activity">
+          <div class="activityrow"><div class="activityicon">🔐</div><p><strong>Sesi masuk</strong><br>Akun terhubung melalui Supabase Auth.</p></div>
+          <div class="activityrow"><div class="activityicon">🧩</div><p><strong>Modul dasbor</strong><br>Navigasi utama sudah tersedia.</p></div>
+          <div class="activityrow"><div class="activityicon">🛠️</div><p><strong>Tahap selanjutnya</strong><br>Menghubungkan tiap menu dengan database dan hak akses.</p></div>
+        </div></section>
+      </div>
+      <div class="foot">SIAPIS · SLB Negeri Alor · Administrasi Sekolah Digital</div>
+    </div>
+  </main>
 </div>
-
+<script>
+const PROJECT_URL="https://qhihfdzllcnphdodllkt.supabase.co";
+const PUBLISHABLE_KEY="sb_publishable_LPfZd-SJTEbVoowKdT1Aig_wsn774uF";
+const SITE_URL="https://ferdinanmanilou2-arch.github.io/siapisslbnalor/";
+const db=window.supabase.createClient(PROJECT_URL,PUBLISHABLE_KEY);
+const content=document.getElementById("content");
+const pageTitle=document.getElementById("pageTitle");
+const sidebar=document.getElementById("sidebar");
+const overlay=document.getElementById("overlay");
+const names={dashboard:"Dasbor Utama",profil:"Profil Sekolah",induk:"Data Induk Sekolah",siswa:"Data Siswa",ppdb:"PPDB",arsip:"Arsip Dokumen",sarpras:"Sarana Prasarana",seni:"Seni Budaya",olahraga:"Olahraga",kegiatan:"Kegiatan & Pengumuman",kontrol:"Kontrol Admin",pengaturan:"Pengaturan"};
+const descriptions={profil:"Latar belakang, visi, misi, tujuan, dan informasi resmi sekolah.",induk:"Data guru dan tenaga kependidikan, kepala sekolah, serta struktur organisasi.",siswa:"Pengelolaan data siswa berdasarkan jenjang SD, SMP, dan SMA.",ppdb:"Formulir pendaftaran, data pendaftar, seleksi, hasil, dan laporan PPDB.",arsip:"Pengelolaan surat masuk, surat keluar, dan dokumen penting sekolah.",sarpras:"Pendataan barang bergerak dan tidak bergerak serta kondisi sarana prasarana.",seni:"Dokumentasi dan informasi kegiatan pembelajaran Seni Budaya.",olahraga:"Dokumentasi dan informasi kegiatan olahraga peserta didik.",kegiatan:"Pengumuman, agenda, kalender, dan dokumentasi kegiatan sekolah.",kontrol:"Pemantauan akun, persetujuan pendaftaran PTK, dan aktivitas pengguna.",pengaturan:"Pengaturan tampilan dan preferensi aplikasi SIAPIS."};
+function dashboardMarkup(){return document.getElementById("dashboardTemplate").innerHTML;}
+async function guard(){
+ const {data,error}=await db.auth.getSession();
+ if(error||!data.session){window.location.replace(SITE_URL+"login.html");return false;}
+ document.getElementById("userEmail").textContent=data.session.user.email||"Pengguna SIAPIS";
+ document.getElementById("userName").textContent=data.session.user.email==="ferdinanmanilou2@gmail.com"?"Admin SIAPIS":"Pengguna SIAPIS";
+ return true;
+}
+function openPage(page){
+ document.querySelectorAll("#navigation button").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
+ pageTitle.textContent=names[page]||"SIAPIS";
+ if(page==="dashboard"){content.innerHTML=dashboardMarkup();wireQuickButtons();}else{
+ content.innerHTML='<section class="moduleview"><h3>'+escapeText(names[page]||"Modul SIAPIS")+'</h3><p>'+escapeText(descriptions[page]||"Modul administrasi sekolah.")+'</p><span class="modulebadge">Modul tampilan tersedia · Koneksi data sedang disiapkan</span><p>Menu ini belum menyimpan atau mengubah data. Kita akan menghubungkannya ke database Supabase secara bertahap dengan hak akses yang aman.</p><button id="backDashboard" style="background:#2878c8;color:white;border:0;border-radius:10px;padding:11px 15px">← Kembali ke Dasbor</button></section><div class="foot">SIAPIS · SLB Negeri Alor</div>';
+ document.getElementById("backDashboard").addEventListener("click",()=>openPage("dashboard"));
+ }
+ sidebar.classList.remove("open");overlay.classList.remove("show");
+}
+function escapeText(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function wireQuickButtons(){content.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>openPage(b.dataset.page)));}
+document.querySelectorAll("#navigation button").forEach(b=>b.addEventListener("click",()=>openPage(b.dataset.page)));
+document.getElementById("hamb").addEventListener("click",()=>{sidebar.classList.toggle("open");overlay.classList.toggle("show");});
+overlay.addEventListener("click",()=>{sidebar.classList.remove("open");overlay.classList.remove("show");});
+document.getElementById("logout").addEventListener("click",async()=>{await db.auth.signOut();window.location.replace(SITE_URL+"login.html");});
+guard().then(ok=>{if(ok)wireQuickButtons();});
+</script>
+<template id="dashboardTemplate">
+<section class="welcome"><div><h3>Selamat datang di SIAPIS 👋</h3><p>Sistem Informasi Administrasi dan Profil Sekolah SLB Negeri Alor. Kelola informasi dan administrasi sekolah dengan tampilan yang lebih rapi, mudah, dan terpusat.</p></div><div class="welcome-tag">✦ Administrasi Sekolah Digital</div></section>
+<div class="sectionhead"><div><h3>Ringkasan Sekolah</h3><p>Ringkasan data akan tampil setelah modul database diaktifkan.</p></div></div>
+<section class="stats">
+<article class="stat"><div class="stat-top"><span class="stat-label">Peserta Didik</span><span class="stat-icon c-blue">🎒</span></div><strong>—</strong><small>Menunggu koneksi data siswa</small></article>
+<article class="stat"><div class="stat-top"><span class="stat-label">Guru & Tendik</span><span class="stat-icon c-teal">👥</span></div><strong>—</strong><small>Menunggu koneksi data PTK</small></article>
+<article class="stat"><div class="stat-top"><span class="stat-label">Arsip Dokumen</span><span class="stat-icon c-gold">🗂️</span></div><strong>—</strong><small>Menunggu modul arsip</small></article>
+<article class="stat"><div class="stat-top"><span class="stat-label">Kegiatan Sekolah</span><span class="stat-icon c-violet">📅</span></div><strong>—</strong><small>Menunggu modul kegiatan</small></article>
+</section>
+<div class="lower">
+<section class="panel"><h3>Akses Cepat</h3><p class="sub">Pilih menu yang ingin dibuka.</p><div class="quickgrid">
+<button class="quick" data-page="siswa"><span>🎒</span><strong>Data Siswa</strong></button><button class="quick" data-page="induk"><span>👥</span><strong>Data Guru & Tendik</strong></button><button class="quick" data-page="ppdb"><span>📝</span><strong>Penerimaan Peserta Didik</strong></button><button class="quick" data-page="arsip"><span>🗂️</span><strong>Arsip Dokumen</strong></button><button class="quick" data-page="sarpras"><span>🏢</span><strong>Sarana Prasarana</strong></button><button class="quick" data-page="kegiatan"><span>📅</span><strong>Kegiatan Sekolah</strong></button>
+</div></section>
+<section class="panel"><h3>Informasi Sistem</h3><p class="sub">Status awal aplikasi</p><div class="activity"><div class="activityrow"><div class="activityicon">🔐</div><p><strong>Sesi masuk</strong><br>Akun terhubung melalui Supabase Auth.</p></div><div class="activityrow"><div class="activityicon">🧩</div><p><strong>Modul dasbor</strong><br>Navigasi utama sudah tersedia.</p></div><div class="activityrow"><div class="activityicon">🛠️</div><p><strong>Tahap selanjutnya</strong><br>Menghubungkan tiap menu dengan database dan hak akses.</p></div></div></section>
+</div><div class="foot">SIAPIS · SLB Negeri Alor · Administrasi Sekolah Digital</div>
+</template>
 </body>
 </html>
-
