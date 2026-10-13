@@ -1,31 +1,242 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-<title>Login Admin SIAPIS</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login SIAPIS - SLB Negeri Alor</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #dbeafe, #e0f2fe);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+    }
+    .card {
+      background: white;
+      padding: 28px;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 360px;
+      box-shadow: 0 8px 28px #0002;
+      text-align: center;
+    }
+    input, button {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+    input { border: 1px solid #cbd5e1; }
+    button {
+      border: 0;
+      background: #1677c8;
+      color: white;
+      cursor: pointer;
+    }
+    .secondary { background: #475569; }
+    #message { overflow-wrap: anywhere; font-size: 14px; }
+    [hidden] { display: none !important; }
+  </style>
 </head>
+<body>
+  <div class="card">
+    <h2>SIAPIS</h2>
+    <p>SLB Negeri Alor</p>
 
-<body style="font-family:Arial;text-align:center;margin-top:100px;">
+    <section id="loginSection">
+      <h3>Login Admin / PTK</h3>
+      <form id="loginForm">
+        <input id="email" type="email"
+          placeholder="Alamat email" autocomplete="username" required>
+        <input id="password" type="password"
+          placeholder="Kata sandi" autocomplete="current-password" required>
+        <button type="submit">Masuk</button>
+      </form>
+      <button id="forgotButton" class="secondary" type="button">
+        Lupa kata sandi
+      </button>
+    </section>
 
-<h2>Login Admin SIAPIS</h2>
+    <section id="resetSection" hidden>
+      <h3>Buat Kata Sandi Baru</h3>
+      <form id="resetForm">
+        <input id="newPassword" type="password"
+          placeholder="Kata sandi baru (minimal 8 karakter)"
+          autocomplete="new-password" minlength="8" required>
+        <input id="confirmPassword" type="password"
+          placeholder="Ulangi kata sandi baru"
+          autocomplete="new-password" minlength="8" required>
+        <button type="submit">Simpan Kata Sandi</button>
+      </form>
+    </section>
 
-<input type="text" id="user" placeholder="Username"><br><br>
-<input type="password" id="pass" placeholder="Password"><br><br>
+    <p id="message" role="status" aria-live="polite"></p>
+  </div>
 
-<button onclick="login()">Login</button>
+  <script>
+    const PROJECT_URL =
+      "https://qhihfdzllcnphdodllkt.supabase.co";
 
-<script>
-function login(){
-let u=document.getElementById("user").value;
-let p=document.getElementById("pass").value;
+    const PUBLISHABLE_KEY =
+      "sb_publishable_LPfZd-SJTEbVoowKdT1Aig_wsn774uF";
 
-if(u=="admin" && p=="123"){
-window.location="admin.html";
-}else{
-alert("Login gagal");
-}
-}
-</script>
+    const SITE_URL =
+      "https://ferdinanmanilou2-arch.github.io/siapisslbnalor/";
 
+    const db = window.supabase.createClient(
+      PROJECT_URL,
+      PUBLISHABLE_KEY
+    );
+
+    const message = document.getElementById("message");
+    const loginSection = document.getElementById("loginSection");
+    const resetSection = document.getElementById("resetSection");
+
+    function showMessage(text) {
+      message.textContent = text;
+    }
+
+    function showResetForm() {
+      loginSection.hidden = true;
+      resetSection.hidden = false;
+      showMessage("Silakan buat kata sandi baru.");
+    }
+
+    // Tampilkan formulir reset ketika tautan pemulihan dibuka.
+    async function checkRecoveryLink() {
+      const params = new URLSearchParams(
+        window.location.hash.substring(1)
+      );
+
+      if (params.get("error")) {
+        showMessage(
+          "Tautan tidak valid atau kedaluwarsa. " +
+          "Silakan minta tautan pemulihan baru."
+        );
+        return;
+      }
+
+      if (params.get("type") === "recovery") {
+        const { data, error } = await db.auth.getSession();
+
+        if (error || !data.session) {
+          showMessage(
+            "Sesi pemulihan tidak tersedia. " +
+            "Tautan mungkin sudah kedaluwarsa."
+          );
+          return;
+        }
+
+        showResetForm();
+      }
+    }
+
+    document.getElementById("loginForm").addEventListener(
+      "submit", async function(event) {
+        event.preventDefault();
+        showMessage("Memeriksa akun...");
+
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+
+        const { data, error } = await db.auth.signInWithPassword({
+          email: email,
+          password: password
+        });
+
+        if (error) {
+          showMessage("Login gagal: " + error.message);
+          return;
+        }
+
+        if (!data.session) {
+          showMessage("Sesi login tidak berhasil dibuat.");
+          return;
+        }
+
+        window.location.href = SITE_URL + "admin.html";
+      }
+    );
+
+    document.getElementById("forgotButton").addEventListener(
+      "click", async function() {
+        const email = document.getElementById("email").value.trim();
+
+        if (!email) {
+          showMessage("Masukkan email terlebih dahulu.");
+          return;
+        }
+
+        showMessage("Meminta tautan pemulihan...");
+
+        const { error } = await db.auth.resetPasswordForEmail(email, {
+          redirectTo: SITE_URL + "login.html"
+        });
+
+        if (error) {
+          showMessage("Belum berhasil: " + error.message);
+          return;
+        }
+
+        showMessage(
+          "Permintaan berhasil. Periksa email dan folder Spam. " +
+          "Jika terkena batas pengiriman, tunggu sebelum mencoba lagi."
+        );
+      }
+    );
+
+    document.getElementById("resetForm").addEventListener(
+      "submit", async function(event) {
+        event.preventDefault();
+
+        const password = document.getElementById("newPassword").value;
+        const confirm = document.getElementById("confirmPassword").value;
+
+        if (password.length < 8) {
+          showMessage("Kata sandi minimal 8 karakter.");
+          return;
+        }
+
+        if (password !== confirm) {
+          showMessage("Kedua kata sandi belum sama.");
+          return;
+        }
+
+        showMessage("Menyimpan kata sandi baru...");
+
+        const { error } = await db.auth.updateUser({
+          password: password
+        });
+
+        if (error) {
+          showMessage("Gagal menyimpan: " + error.message);
+          return;
+        }
+
+        await db.auth.signOut();
+        window.history.replaceState(
+          null, "", SITE_URL + "login.html"
+        );
+
+        resetSection.hidden = true;
+        loginSection.hidden = false;
+        document.getElementById("password").value = "";
+
+        showMessage(
+          "Kata sandi berhasil diperbarui. " +
+          "Silakan login menggunakan kata sandi baru."
+        );
+      }
+    );
+
+    checkRecoveryLink();
+  </script>
 </body>
 </html>
-
